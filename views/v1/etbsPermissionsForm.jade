@@ -3,15 +3,26 @@ extend ../layout
 block content
   h1 Permissions Page
   p Welcome to Permissions Page
-  form(method='POST' action='/etbs-permissions/insert')
+  form(method='POST' action=action)
+    if permission != undefined
+      input#originPermission(type='hidden' name='originPermission' value=permission)
+    if profileid != undefined
+      input#originProfileid(type='hidden' name='originProfileid' value=profileid)
+    if perm_type != undefined
+      input#originPerm_type(type='hidden' name='originPerm_type' value=perm_type)
     div.form-group
       label(for='permission') Permission:
-      input#permission.form-control(type='text', placeholder='Permission' name='permission')
+      input#permission.form-control(type='text', placeholder='Permission' name='permission' value=permission)
     div.form-group
       label(for='profileid') Profile ID:
-      input#profileid.form-control(type='text', placeholder='Profile ID' name='profileid')
+      input#profileid.form-control(type='text', placeholder='Profile ID' name='profileid' value=profileid)
     div.form-group
       label(for='perm_type') Permission Type:
-      input#perm_type.form-control(type='text', placeholder='Profile ID' name='perm_type')
-    button.btn.btn-primary(type='submit') Submit
+      input#perm_type.form-control(type='text', placeholder='Profile ID' name='perm_type' value=perm_type)
+    if action == '/etbs-permissions/insert'
+      button.btn.btn-primary(type='submit') Create
+    else if action == '/etbs-permissions/update'
+      button.btn.btn-primary(type='submit') Save
+    else
+      button.btn.btn-primary(type='submit') Remove
   

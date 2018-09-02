@@ -3,15 +3,18 @@ extend ../layout
 block content
   ul
     li
-      a(href='./etbs-roles') Roles
+      a(href='/etbs-roles') Roles
     li
-      a(href='./etbs-permissions') Permissions
+      a(href='/etbs-permissions') Permissions
     li
-      a(href='./etbs-users') Users
+      a(href='/etbs-users') Users
   h1 Permissions Page
   p Welcome to Permissions Page
-  a(href='./etbs-permissions/form') New
+  a(href='/etbs-permissions/add') New
   ul
     each perm in permissions
       li='permission: ' + perm.permission + ', profileid: ' + perm.profileid + ', perm_type: ' + perm.perm_type
+        a(href='/etbs-permissions/edit/' + perm.permission + '/' + perm.profileid + '/' + perm.perm_type) Edit
+        = '-'
+        a(href='/etbs-permissions/remove/' + perm.permission + '/' + perm.profileid + '/' + perm.perm_type) Remove
   
