@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
 
 });
 
-router.get('/form', function(req, res, next) {
+router.get('/add', function(req, res, next) {
   res.render('v1/etbsRolesForm', {
     action: '/etbs-roles/insert'
   });
@@ -46,7 +46,7 @@ router.post('/insert', function(req, res, next) {
   }
 });
 
-router.get('/:rolename/:profileid', function(req, res, next) {
+router.get('/edit/:rolename/:profileid', function(req, res, next) {
   var rolename = req.params.rolename;
   var profileid = req.params.profileid;
 
@@ -97,16 +97,29 @@ router.post('/update', function(req, res, next) {
   }
 });
 
-router.get('/:rolename/:profileid/:remove', function(req, res, next) {
+router.get('/remove/:rolename/:profileid', function(req, res, next) {
   var rolename = req.params.rolename;
   var profileid = req.params.profileid;
-  var remove = req.params.remove;
-  res.render('v1/etbsRolesForm', {
-    action: '/etbs-roles/delete',
-    rolename: rolename,
-    profileid: profileid,
-    remove: remove
-  });
+
+  var conn = database.getConnection();
+
+  if (conn) {
+    var sql = "SELECT COUNT(1) AS cnt FROM users WHERE rolename = ?";
+    var conditions = [rolename];
+
+    conn.query(sql, conditions, function (err, result) {
+      var cnt = result.length ? result[0].cnt : 0;
+
+      res.render('v1/etbsRolesForm', {
+        action: '/etbs-roles/delete',
+        rolename: rolename,
+        profileid: profileid,
+        cnt: cnt
+      });
+
+      conn.end();
+    });
+  }
 });
 
 router.post('/delete', function(req, res, next) {
@@ -129,17 +142,89 @@ router.post('/delete', function(req, res, next) {
   }
 });
 
-router.get('/:rolename/users', function(req, res, next) {
-  console.log(req.params.rolename);
-  res.redirect('/etbs-roles');
+router.get('/users/:rolename/:profileid', function(req, res, next) {
+  var rolename = req.params.rolename;
+  var profileid = req.params.profileid;
+
+  var roleUsers = {};
+
+  var conn = database.getConnection();
+
+  if (conn) {
+    var sql = 'SELECT username, rolename FROM users WHERE rolename = ?';
+    var conditions = [rolename];
+
+    conn.query(sql, conditions, function (err, result) {
+      
+      if (result) {
+        roleUsers = result;
+        
+        var sql = 'SELECT username, rolename FROM users WHERE rolename != ?';
+        var conditions = [rolename];
+        
+        conn.query(sql, conditions, function (err, unRoleResult) {
+          res.render('v1/etbsRoleUsers', 
+            {
+              users: roleUsers, 
+              unRoleUsers: unRoleResult, 
+              rolename: rolename,
+              profileid: profileid
+            }
+          );
+          conn.end();
+        });
+      }
+    });
+  }
 });
 
-router.post('/:rolename/users/insert', function(req, res, next) {
-  res.send('respond etbs-roles');
+router.post('/users/insert', function(req, res, next) {
+  var username = req.body.username;
+  var rolename = req.body.rolename;
+  var profileid = req.body.profileid;
+
+  var conn = database.getConnection();
+
+  if (conn) {
+
+    var sql = "UPDATE users SET ? "
+      + "WHERE username = ? ";
+    var setditions = [
+      { rolename: rolename },
+      username
+    ];
+
+    conn.query(sql, setditions, function (err, result) {
+      res.redirect('/etbs-roles/users/' + rolename + '/' + profileid);
+      conn.end();
+    });
+
+  }
+
 });
 
-router.post('/:rolename/users/delete', function(req, res, next) {
-  res.send('respond etbs-roles');
+router.post('/users/delete', function(req, res, next) {
+  var username = req.body.username;
+  var rolename = req.body.rolename;
+  var profileid = req.body.profileid;
+
+  var conn = database.getConnection();
+
+  if (conn) {
+
+    var sql = "UPDATE users SET ? "
+      + "WHERE username = ? ";
+    var setditions = [
+      { rolename: '' },
+      username
+    ];
+
+    conn.query(sql, setditions, function (err, result) {
+      res.redirect('/etbs-roles/users/' + rolename + '/' + profileid);
+      conn.end();
+    });
+
+  }
 });
 
 module.exports = router;

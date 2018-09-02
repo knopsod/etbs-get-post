@@ -1,0 +1,30 @@
+extend ../layout
+
+block content
+  ul
+    li
+      a(href='/etbs-roles') Roles
+    li
+      a(href='/etbs-permissions') Permissions
+    li
+      a(href='/etbs-users') Users
+  h1 Role Users Page
+  p Welcome to Role Users Page : 
+    strong= rolename
+  ul
+    each user in users
+      li= 'username: ' + user.username + ', rolename: ' + user.rolename
+        form(method='POST' action='/etbs-roles/users/delete')
+          input#username(type='hidden' name='username' value=user.username)
+          input#rolename(type='hidden' name='rolename' value=rolename)
+          input#profileid(type='hidden' name='profileid' value=profileid)
+          button.btn.btn-primary(type='submit') Remove
+  hr
+  ul
+    each user in unRoleUsers
+      li= 'username: ' + user.username + ', rolename: ' + user.rolename
+        form(method='POST' action='/etbs-roles/users/insert')
+          input#username(type='hidden' name='username' value=user.username)
+          input#rolename(type='hidden' name='rolename' value=rolename)
+          input#profileid(type='hidden' name='profileid' value=profileid)
+          button.btn.btn-primary(type='submit') Add
