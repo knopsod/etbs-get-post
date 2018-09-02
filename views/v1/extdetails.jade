@@ -1,0 +1,65 @@
+extends reportLayout
+
+block header
+
+block content
+    - var now = new Date().toISOString().split(/[T.]/)
+    .container-fluid.theme-showcase(role='main')
+        .panel.panel-primary
+            .panel-heading
+                h4.panel-title #{title}
+            .panel-body
+                em.small
+                    .row
+                        .col-md-1 Extension:
+                        .col-md-8 #{req.body.extFrom} - #{req.body.extTo}
+                        .col-md-3.text-right.small print @ #{now[0]} #{now[1]}
+                    .row
+                        .col-md-1 Date:
+                        .col-md-8 #{req.body.dateFrom} to #{req.body.dateTo}
+                    .row
+                        .col-md-1 Direction:
+                        .col-md-8 #{req.body.dirOUT ? 'OUT' : ''} #{req.body.dirIN ? 'IN' : ''} #{req.body.dirINT ? 'INT' : ''}
+                    .row
+                        .col-md-1 Toll:
+                        .col-md-8 #{req.body.tollFree ? 'Free' : ''}
+                                | #{req.body.tollLocal ? 'Local' : ''}
+                                | #{req.body.tollDomestic ? 'Domestic' : ''}
+                                | #{req.body.tollMobile? 'Mobile' : ''}
+                                | #{req.body.tollInter? 'International' : ''}
+        table.table.table-hover
+            thead
+                th Caller
+                th
+                th DialNumber
+                th Destination
+                th Start Time
+                th Duration
+                th.text-right Cost
+            tbody.small
+                - var lastCaller
+                for row in data
+                    - var hh = String('00' + Math.floor(row.duration / 3600)).slice(-2)
+                    - var mm = String('00' + Math.floor((row.duration % 3660) / 60)).slice(-2)
+                    - var ss = String('00' + row.duration % 60).slice(-2)
+                    - var dirColor = (row.callType == 'OUT' ? 'text-danger' : 'text-active')
+
+                    tr
+                        if (!lastCaller || lastCaller != row.caller)
+                            - lastCaller = row.caller
+                            td #{row.caller}
+                        else
+                            td
+
+                        td.small.text-right(class=dirColor)
+                            case row.callType
+                                when 'OUT'
+                                    span.small.glyphicon.glyphicon-arrow-right
+                                when 'IN'
+                                    span.small.glyphicon.glyphicon-arrow-left
+                        td #{row.called}
+                        td #{row.calledName}
+                        td #{row.startTime}
+                        td #{hh}:#{mm}:#{ss}
+                        td.text-right #{row.charge > 0 ? row.charge.toFixed(2) : '-'}
+block script

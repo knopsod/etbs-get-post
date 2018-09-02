@@ -1,0 +1,335 @@
+extend ../layout2
+
+block header
+	//link(rel='stylesheet', href='/editable/bootstrap3-editable/css/bootstrap-editable.css')
+	//link(rel='stylesheet', href='/bootstrap-select/dist/css/bootstrap-select.min.css')
+
+//block content-header
+
+block content
+	// Content Header (Page header)
+	section.content-header
+		h1
+			| Extensions
+			small extension
+			//|  
+			//button.btn-ext-add.btn.btn-success(type='button', disabled='') 
+				i.fa.fa-plus
+				| Add Extension
+		ol.breadcrumb
+			li
+				a(href='/api/v1/extensions?access_token=' + token)
+					i.fa.fa-group
+					|  Extensions
+			li.active extension
+	// Main content
+	section.content
+		.row
+			.col-md-12
+				.box.box-primary
+					.box-header.with-border
+						//button.btn-ext-add.btn.btn-success(type='button') 
+							i.fa.fa-plus
+							|  Add Extension
+						//|  
+						button.btn-ext-add-range.btn.bg-purple(type='button') 
+							i.fa.fa-plus-square
+							|  Create Extension Range
+						|  
+						button.btn-ext-move-to-org.btn.btn-warning(type='button') 
+							i.fa.fa-sitemap
+							|  Move to Organize
+					.box-body.ext-list
+					.box-footer.no-padding
+					
+	.modal.ext-modal-add-ext.fade(tabindex='-1', role='dialog')
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type='button', data-dismiss='modal', aria-label='Close')
+						span(aria-hidden='true') ×
+					h4.modal-title Create Extension
+				.modal-body
+					form#newExtensionForm.form-horizontal
+						.form-group
+							label.col-sm-2.control-label(for='inputAddExt') Extension
+							.col-sm-10
+								input#inputAddExt.form-control(name='ext', type='number', placeholder='Extension')
+						.form-group
+							label.col-sm-2.control-label(for='inputAddExtName') Name
+							.col-sm-10
+								input#inputAddExtName.form-control(name='name', type='text', placeholder='Name')
+						// radio
+						.form-group
+							label.col-sm-2.control-label(for='selectAddExtType') Type
+							.col-sm-10
+								.col-sm-4
+									input.form-control.flat-blue(type='radio', name='exttype', data-val='Normal', checked='')
+									|  Normal
+								.col-sm-4
+									input.form-control.flat-blue(type='radio', name='exttype', data-val='VIP')
+									|  VIP
+								.col-sm-4
+									input.form-control.flat-blue(type='radio', name='exttype', data-val='Guest', disabled='')
+									|  Guest
+									input#selectAddExtType.form-control(name='exttypeval', type='hidden', value='Normal')
+
+						.form-group
+							label.col-sm-2.control-label(for='inputAddExtAuthrizeCode') Auth. Code
+							.col-sm-10
+								input#inputAddExtAuthrizeCode.form-control(name='authcode', type='text', placeholder='Authorize Code')
+						.form-group
+							.col-sm-offset-2.col-sm-10
+								.checkbox
+										input#cbAddExtLicense.minimal(name='lic', type='checkbox', checked='')
+										label
+										| Is License?
+										input#inputAddExtLicense.form-control(name='licval', type='hidden', value='1')
+										//a(href='#') terms and conditions
+				.modal-footer
+					button.btn.btn-default(type='button', data-dismiss='modal') Cancel
+					button.btn-ext-add-ok.btn.btn-primary(type='button') Add
+			// /.modal-content
+		// /.modal-dialog
+	// /.modal
+	
+	.modal.ext-modal-add-range.fade(tabindex='-1', role='dialog')
+		.modal-dialog.modal-lg
+			.modal-content
+				.modal-header
+					button.close(type='button', data-dismiss='modal', aria-label='Close')
+						span(aria-hidden='true') ×
+					h4.modal-title Create Extension Range
+				.modal-body
+					form#newExtensionRangeForm.form-horizontal
+						.form-group
+							label.col-sm-2.control-label(for='inputFromExt') Extension
+							.col-sm-10
+								input#inputFromExt.form-control(name='ext_from', type='number', placeholder='From Extension')
+						.form-group
+							label.col-sm-2.control-label(for='inputToExt') Through
+							.col-sm-10
+								input#inputToExt.form-control(name='ext_to', type='number', placeholder='To Extension')
+						.form-group
+							label.col-sm-2.control-label(for='inputAddRangeExtName') Name
+							.col-sm-7
+								input#inputAddRangeExtName.form-control(name='name', type='text', placeholder='Name')
+							.col-sm-3
+								.checkbox
+										input#cbSameNameExtension.cb-same-extname-minimal(type='checkbox')
+										label
+										| Same Extension?
+										input#inputSameNameExtension.form-control(name='sameext', type='hidden', value='0')
+						// radio
+						.form-group
+							label.col-sm-2.control-label(for='selectAddRangeExtType') Type
+							.col-sm-10
+								.col-sm-4
+									input.form-control.flat-blue(type='radio', name='exttype', data-val='Normal', checked='')
+									|  Normal
+								.col-sm-4
+									input.form-control.flat-blue(type='radio', name='exttype', data-val='VIP', disabled='')
+									|  VIP
+								.col-sm-4
+									input.form-control.flat-blue(type='radio', name='exttype', data-val='Guest', disabled='')
+									|  Guest
+									input#selectAddRangeExtType.form-control(name='exttypeval', type='hidden' value='Normal')
+
+						.form-group
+							label.col-sm-2.control-label(for='inputAddRangeExtAuthrizeCode') Auth. Code
+							.col-sm-7
+								input#inputAddRangeExtAuthrizeCode.form-control(name='authcode', type='text', placeholder='Authorize Code')
+							.col-sm-3
+								.checkbox
+										input#cbSameAuthCodeExtension.cb-same-authcode-minimal(type='checkbox')
+										label
+										| Same Extension?
+										input#inputSameAuthCodeExtension.form-control(name='sameauthcode', type='hidden', value='0')
+						.form-group
+							.col-sm-offset-2.col-sm-10
+								.checkbox
+										input#cbAddRangeExtLicense.minimal(type='checkbox', checked='')
+										label
+										| Is License?
+										input#inputAddRangeExtLicense.form-control(name='licval', type='hidden', value='1')
+										//a(href='#') terms and conditions
+				.modal-footer
+					button.btn.btn-default(type='button', data-dismiss='modal') Cancel
+					button.btn-ext-add-range-ok.btn.btn-primary(type='button') Add
+			// /.modal-content
+		// /.modal-dialog
+	// /.modal
+
+block script
+	//script(type='text/javascript').
+	//var rowPerPage = 9;
+	//var rateList = [];
+
+	//script(type='text/javascript', src='/editable/bootstrap3-editable/js/bootstrap-editable.min.js')
+	//script(type='text/javascript', src='/bootstrap-select/dist/js/bootstrap-select.min.js')
+	//script(type='text/javascript', src='/javascripts/jquery.bootpag.min.js')
+	//script(type='text/javascript', src='/javascripts/tariff.js')
+	script(type='text/javascript', src='/javascripts/moment.min.js')
+	script(type='text/javascript', src='/javascripts/jquery.finger.min.js')
+	script(type='text/javascript', src='/javascripts/extensions.func.js')
+	script(type='text/javascript').
+		$(document).ready(function() {
+			
+			/* declare variables */
+			var v_exttype = 'Normal';
+			var v_lic = true;
+			var v_same_name = false;
+			var v_same_authcode = false;
+			
+			/*$.Finger = {
+				pressDuration: 300,
+				doubleTapInterval: 300,
+				flickDuration: 150,
+				motionThreshold: 5
+			};*/
+			
+			getLicenseUsage("!{user}","!{ext_lic}","!{token}");
+			getAllExtension("!{user}","!{ext_lic}","!{token}");
+			
+			/* jQuery event handler */
+			
+			/*$(document).on('dblclick', 'a.btn-ext-piece', function(ev) {
+				//ev.preventDefault();
+
+				alert('dblclick');
+			});*/
+			
+			$(document).on('click tap', 'a.btn-ext-piece', function(ev) {
+				ev.preventDefault();
+				/*if ($(this).hasClass('bg-blue'))
+					$(this).removeClass('bg-blue');
+				else
+					$(this).addClass('bg-blue');*/
+				//alert('tap');
+				var sel_ext = $(this).attr('data-val');
+				
+				window.location = '/api/v1/extensions/info?e='+sel_ext+'&access_token='+'!{token}';
+			});
+			
+			/*$(document).on('doubletap', 'a.btn-ext-piece', function(ev) {
+				ev.preventDefault();
+
+				//alert('doubletap');
+			});*/
+			
+			/*$(document).on('click', 'a.btn-ext-piece', function(ev) {
+				//ev.preventDefault();
+				if ($(this).hasClass('bg-blue'))
+					$(this).removeClass('bg-blue');
+				else
+					$(this).addClass('bg-blue');
+			});*/
+			
+			$('button.btn-ext-add').click(function(ev) {
+				ev.preventDefault();
+				
+				$('.ext-modal-add-ext').modal();
+			});
+			
+			$('button.btn-ext-add-range').click(function(ev) {
+				ev.preventDefault();
+				
+				$('.ext-modal-add-range').modal();
+			});
+			
+			$('button.btn-ext-add-ok').click(function(ev) {
+				ev.preventDefault();
+				
+				var	v_ext = $('input#inputAddExt').val(),
+					v_name = $('input#inputAddExtName').val(),
+					v_authcode = $('input#inputAddExtAuthrizeCode').val();
+				
+				addExtension("!{user}","!{ext_lic}","!{token}", v_ext);
+			});
+			
+			$('button.btn-ext-add-range-ok').click(function(ev) {
+				ev.preventDefault();
+				
+				var	v_from_ext = $('input#inputFromExt').val(),
+					v_to_ext = $('input#inputToExt').val(),
+					v_name = $('input#inputAddRangeExtName').val(),
+					v_authcode = $('input#inputAddRangeExtAuthrizeCode').val();
+				
+				addRangeExtension("!{user}","!{ext_lic}","!{token}", v_from_ext, v_to_ext, v_name, v_exttype, v_authcode, v_lic);
+			});
+			
+			$('input[type="radio"].flat-blue').on('ifChecked', function(event){
+				event.preventDefault();
+				//alert(event.type + ' callback');
+				v_exttype = $(this).attr('data-val')
+				$('input#selectAddExtType').val(v_exttype);
+				$('input#selectAddRangeExtType').val(v_exttype);
+				//console.log(v_exttype);
+			});
+			
+			$('input[type="checkbox"].minimal').on('ifChecked', function(event){
+				event.preventDefault();
+				//alert(event.type + ' callback');
+				v_lic = true;
+				$('input#inputAddExtLicense').val('1');
+				$('input#inputAddRangeExtLicense').val('1');
+				//console.log(v_lic);
+			});
+			
+			$('input[type="checkbox"].minimal').on('ifUnchecked', function(event){
+				event.preventDefault();
+				//alert(event.type + ' callback');
+				v_lic = false;
+				$('input#inputAddExtLicense').val('0');
+				$('input#inputAddRangeExtLicense').val('0');
+				//console.log(v_lic);
+			});
+			
+			$('input[type="checkbox"].cb-same-extname-minimal').on('ifChecked', function(event){
+				event.preventDefault();
+				//alert(event.type + ' callback');
+				v_same_name = true;
+				$('input#inputSameNameExtension').val('1');
+				//console.log(v_lic);
+			});
+			
+			$('input[type="checkbox"].cb-same-extname-minimal').on('ifUnchecked', function(event){
+				event.preventDefault();
+				//alert(event.type + ' callback');
+				v_same_name = false;
+				$('input#inputSameNameExtension').val('0');
+				//console.log(v_lic);
+			});
+			
+			$('input[type="checkbox"].cb-same-authcode-minimal').on('ifChecked', function(event){
+				event.preventDefault();
+				//alert(event.type + ' callback');
+				v_same_authcode = true;
+				$('input#inputSameAuthCodeExtension').val('1');
+				//console.log(v_lic);
+			});
+			
+			$('input[type="checkbox"].cb-same-authcode-minimal').on('ifUnchecked', function(event){
+				event.preventDefault();
+				//alert(event.type + ' callback');
+				v_same_authcode = false;
+				$('input#inputSameAuthCodeExtension').val('0');
+				//console.log(v_lic);
+			});
+			
+			/* End jQuery event handler */
+			
+			//Flat red color scheme for iCheck
+			$('input[type="radio"].flat-blue').iCheck({
+				checkboxClass: 'icheckbox_flat-blue',
+				radioClass: 'iradio_flat-blue'
+			});
+			
+			//iCheck for checkbox and radio inputs
+			$('input[type="checkbox"].minimal, input[type="checkbox"].cb-same-authcode-minimal, input[type="checkbox"].cb-same-extname-minimal').iCheck({
+				checkboxClass: 'icheckbox_minimal-blue',
+				radioClass: 'iradio_minimal-blue'
+			});
+		});
+		
+		$(document).ajaxStart(function() { Pace.restart(); });

@@ -1,0 +1,40 @@
+{
+    "dbserver": {
+        "host": "localhost",
+        "user": "root",
+        "password": "",
+        "database": "etbsjs"
+    },
+    "redisserver": {
+        "host": "localhost",
+        "port": "6379",
+        "password": "convergence@Admin_1",
+        "database": 0
+    },
+    "dashboard": {
+        "timerRecentCalls": "5000",
+        "showInternal": "false",
+        "showIncoming": "true"
+    },
+    "security": {
+        "tokenLife" : 3600
+    },
+    "mongoose": {
+        "uri": "mongodb://localhost/apiDB"
+    },
+    "default": {
+        "api": {
+            "version" : "v1"
+        },
+        "user": {
+            "username": "sumrit@convergence.co.th",
+            "password": "secret1234",
+            "role": "admin"
+        },
+        "client": {
+            "name": "eTBS Cloud v1",
+            "clientId": "2115BBBK0931",
+            "clientSecret": "54:4A:16:BB:B2:A5"
+        }
+    }
+}

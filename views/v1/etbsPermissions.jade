@@ -1,0 +1,17 @@
+extend ../layout
+
+block content
+  ul
+    li
+      a(href='./etbs-roles') Roles
+    li
+      a(href='./etbs-permissions') Permissions
+    li
+      a(href='./etbs-users') Users
+  h1 Permissions Page
+  p Welcome to Permissions Page
+  a(href='./etbs-permissions/form') New
+  ul
+    each perm in permissions
+      li='permission: ' + perm.permission + ', profileid: ' + perm.profileid + ', perm_type: ' + perm.perm_type
+  

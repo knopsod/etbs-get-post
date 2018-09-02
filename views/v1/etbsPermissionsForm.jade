@@ -1,0 +1,17 @@
+extend ../layout
+
+block content
+  h1 Permissions Page
+  p Welcome to Permissions Page
+  form(method='POST' action='/etbs-permissions/insert')
+    div.form-group
+      label(for='permission') Permission:
+      input#permission.form-control(type='text', placeholder='Permission' name='permission')
+    div.form-group
+      label(for='profileid') Profile ID:
+      input#profileid.form-control(type='text', placeholder='Profile ID' name='profileid')
+    div.form-group
+      label(for='perm_type') Permission Type:
+      input#perm_type.form-control(type='text', placeholder='Profile ID' name='perm_type')
+    button.btn.btn-primary(type='submit') Submit
+  

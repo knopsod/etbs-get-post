@@ -1,0 +1,89 @@
+extend ../layout2
+
+block header
+
+block content
+    section.content-header
+        .row
+            .col-md-3.col-sm-6.col-xs-12
+                .info-box.bg-orange
+                    span.info-box-icon
+                        i.fa.fa-plug
+                    .info-box-content
+                        .info-box-text Connector
+                            .span.pull-right.small
+                                a#connector-control(href='javascript:void(0)', onclick='connectorControl()', style='color: white')
+                                    i.fa#connector-font
+                        .info-box-number#connector-status
+                        span.progress-description#connector-process
+            .col-md-3.col-sm-6.col-xs-12
+                .info-box.bg-red
+                    span.info-box-icon
+                        i.fa.fa-calculator
+                    .info-box-content
+                        .info-box-text Calculator
+                            .span.pull-right.small
+                                a#calculator-control(href='javascript:void(0)', onclick='calculatorControl()', style='color: white')
+                                    i.fa#calculator-font
+                        .info-box-number#calculator-status
+                        span.progress-description#calculator-process
+            .col-md-3.col-sm-6.col-xs-12
+                .info-box.bg-green
+                    span.info-box-icon
+                        i.fa.fa-server
+                    .info-box-content
+                        .info-box-text Disk Free
+                        .info-box-number#disk-free
+                        .progress
+                            .progress-bar#disk-free-bar
+                        span.progress-description#disk-free-percent
+            .col-md-3.col-sm-6.col-xs-12.pull-right
+                .info-box.bg-aqua
+                    span.info-box-icon
+                        i.fa.fa-clock-o
+                    .info-box-content
+                        .info-box-text#today
+                        .info-box-number#now
+    section.content
+        .row
+            .col-md-12
+                .box.box-success
+                    .box-header.with-border
+                        .col-md-2.col-sm-3.col-xs-6
+                            .checkbox
+                                label
+                                    input#show-outbound(type='checkbox', checked)
+                                    | Outbound
+                        .col-md-2.col-sm-3.col-xs-6
+                            .checkbox
+                                label
+                                    input#show-inbound(type='checkbox')
+                                    | Inbound
+                    .box-body
+                        table.table.table-condensed.table-hover#recent-calls
+                            thead
+                                th Caller
+                                th
+                                th Dial Number
+                                th.col-xs-3 Destination
+                                th.col-xs-2 Start Time
+                                th.col-xs-2(style='width: 80px') Duration
+                                th.text-right Cost
+                                th.text-right.hidden-xs Rate
+                            tbody
+
+block script
+    script(type='text/javascript', src='/javascripts/moment.min.js')
+    script(type='text/javascript', src='/javascripts/dashboard.func.js')
+    script(type='text/javascript', src='/javascripts/app.func.js')
+    script(type='text/javascript').
+        $(document).ready(function() {
+            getSystemInfo();
+            setInterval(clock, 1000);
+            setInterval(getSystemInfo, 5000);
+            setInterval(getRecentCalls, #{config.dashboard.timerRecentCalls});
+            getLicenseUsage("!{user}","!{ext_lic}");
+            
+        });
+        
+        /*$(document).ajaxStart(function() { Pace.restart(); });*/

@@ -1,0 +1,130 @@
+extend ../layout2
+
+block header
+
+block content
+
+	// Content Header (Page header)
+	section.content-header
+		h1
+			| Extensions
+			small groups
+		ol.breadcrumb
+			li
+				a(href='/api/v1/organize?access_token=' + token)
+					i.fa.fa-group
+					|  Extensions
+			li.active groups
+	// Main content
+	section.content
+		// Small boxes (Stat box)
+		.row
+			.col-md-12
+				.box.box-warning
+					.box-header.with-border
+						button.btn-org-list-back.btn.bg-purple.margin(type='button') 
+							i.fa.fa-chevron-left
+							|  Back
+						button.btn-org-selected-group.btn.bg-maroon.margin.hidden(type='button') 
+							i.fa.fa-group
+					.box-body.org-list
+
+					.box-footer.no-padding
+	// /.content
+
+	.modal.modal-add-org.fade(tabindex='-1', role='dialog')
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type='button', data-dismiss='modal', aria-label='Close')
+						span(aria-hidden='true') ×
+					h4.modal-title Create Group
+				.modal-body
+					form#newGroupForm.form-horizontal
+						.form-group
+							label.col-sm-2.control-label(for='inputAddGroupName') Name
+							.col-sm-10
+								input#inputAddGroupName.form-control(name='name', type='text', placeholder='Name')
+				.modal-footer
+					button.btn.btn-default(type='button', data-dismiss='modal') Cancel
+					button.btn-add-org-ok.btn.btn-primary(type='button') Add
+			// /.modal-content
+		// /.modal-dialog
+	// /.modal
+	
+block script
+	script(type='text/javascript', src='/javascripts/moment.min.js')
+	script(type='text/javascript', src='/javascripts/jquery.finger.min.js')
+	script(type='text/javascript', src='/javascripts/organizations.func.js')
+	script(type='text/javascript').
+		$(document).ready(function() {
+			var selected_org = null,
+				selected_org_name = null,
+				selected_parent = null;
+
+			getLicenseUsage("!{user}","!{ext_lic}",!"{token}");
+			getAllGroup2("!{user}","!{ext_lic}",!"{token}");
+			
+			$(document).on('click tap', '.org-have-child', function(ev) {
+				ev.preventDefault();
+
+				//console.log($(this).html());
+				//console.log($(this).attr('data-val'));
+				//console.log($('h4.modal-title').text());
+				//$('h4.modal-title').html('Organize List <button type="button" class="btn btn-xs btn-primary">'+$(this).attr('data-org-name')+'</button>');
+
+				selected_org = $(this).attr('data-orgid');
+				selected_org_name = $(this).attr('data-org-name');
+				selected_parent = $(this).attr('data-parent-orgid');
+				
+				$('button.btn-org-list-back').removeClass('disabled').attr('data-parent-orgid', selected_parent);
+				
+				$('button.btn-org-selected-group').removeClass('hidden');
+				$('button.btn-org-selected-group').html('<i class="fa fa-search"> </i> '+selected_org_name).attr('data-orgid', selected_org);
+				$('button.btn-org-selected-group').attr('data-org-name', selected_org_name).attr('data-parent-orgid', selected_parent);
+
+				getGroupById3("!{user}","!{ext_lic}","!{token}", selected_org);
+			});
+			
+			$(document).on('click tap', '.org-no-child', function(ev) {
+				ev.preventDefault();
+				
+				$('button.btn-org-selected-group').addClass('hidden');
+
+				selected_org = $(this).attr('data-orgid');
+				selected_org_name = $(this).attr('data-org-name');
+				selected_parent = $(this).attr('data-parent-orgid');
+				//$('h4.modal-title').html('Organize List <button type="button" class="btn btn-xs btn-primary">'+$(this).attr('data-org-name')+'</button>');
+				window.location = '/api/v1/organize/info?g='+selected_org+'&access_token='+'!{token}';
+			});
+			
+			$(document).on('click tap', 'button.btn-org-selected-group', function(ev) {
+				ev.preventDefault();
+
+				selected_org = $(this).attr('data-orgid');
+				selected_org_name = $(this).attr('data-org-name');
+				selected_parent = $(this).attr('data-parent-orgid');
+				//$('h4.modal-title').html('Organize List <button type="button" class="btn btn-xs btn-primary">'+$(this).attr('data-org-name')+'</button>');
+				window.location = '/api/v1/organize/info?g='+selected_org+'&access_token='+'!{token}';
+			});
+			
+			//$('button.btn-org-list-back').click(function(ev) {
+			$(document).on('click tap', 'button.btn-org-list-back', function(ev) {
+				ev.preventDefault();
+				
+				console.log('back back back');
+				var par_orgid = $(this).attr('data-parent-orgid');
+				
+				if (par_orgid == 'null') {
+					//$('h4.modal-title').html('Organize List ');
+					getAllGroup2("!{user}","!{ext_lic}","!{token}");
+					$('button.btn-org-selected-group').addClass('hidden');
+				}
+				else {
+					
+					getParentGroup2("!{user}","!{ext_lic}","!{token}", par_orgid);
+				}
+			});
+		});
+		
+		

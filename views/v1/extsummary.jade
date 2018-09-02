@@ -1,0 +1,59 @@
+extends reportLayout
+
+block header
+
+block content
+    - var now = new Date().toISOString().split(/[T.]/)
+    .container-fluid.theme-showcase(role='main')
+        .panel.panel-primary
+            .panel-heading
+                h4.panel-title #{title}
+            .panel-body
+                em.small
+                    .row
+                        .col-md-1.col-sm-1.col.xs-2 Extension:
+                        .col-md-8.col-sm-7.col-xs-6 #{req.body.extFrom} - #{req.body.extTo}
+                        .col-md-3.col-sm-4.col-xs-4.text-right.small print @ #{now[0]} #{now[1]}
+                    .row
+                        .col-md-1.col-sm-1.col-xs-2 Date:
+                        .col-md-11.col-sm-11.col-xs-10 #{req.body.dateFrom} to #{req.body.dateTo}
+                    .row
+                        .col-md-1.col-sm-1.col-xs-2 Direction:
+                        .col-md-11.col-sm-11.col-xs-10 #{req.body.dirOUT ? 'OUT' : ''} #{req.body.dirIN ? 'IN' : ''} #{req.body.dirINT ? 'INT' : ''}
+
+        table.table.table-hover
+            thead
+                tr
+                    th Caller
+                    th.text-right Free
+                    th.text-right(colspan='2') Local
+                    th.text-right(colspan='2') Domestic
+                    th.text-right(colspan='2') Mobile
+                    th.text-right(colspan='2') International
+                tr
+                    th
+                    th.text-right #
+                    th.text-right #
+                    th.text-right $
+                    th.text-right #
+                    th.text-right $
+                    th.text-right #
+                    th.text-right $
+                    th.text-right #
+                    th.text-right $
+
+            tbody.small
+                for row in data
+                    tr
+                        td #{row.caller}
+                        td.text-right #{row.freeCount > 0 ? row.freeCount : '-'}
+                        td.text-right #{row.localCount > 0 ? row.localCount : '-'}
+                        td.text-right #{row.localCharge > 0 ? row.localCharge.toFixed(2) : '-'}
+                        td.text-right #{row.domesticCount > 0 ? row.domesticCount : '-'}
+                        td.text-right #{row.domesticCharge > 0 ? row.domesticCharge.toFixed(2) : '-'}
+                        td.text-right #{row.mobileCount > 0 ? row.mobileCount : '-'}
+                        td.text-right #{row.mobileCharge > 0 ? row.mobileCharge.toFixed(2) : '-'}
+                        td.text-right #{row.interCount > 0 ? row.interCount : '-'}
+                        td.text-right #{row.interCharge > 0 ? row.interCharge.toFixed(2) : '-'}
+
+block script

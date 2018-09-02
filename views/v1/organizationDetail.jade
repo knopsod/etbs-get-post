@@ -1,0 +1,143 @@
+extend ../layout2
+
+block header
+
+block content
+	// Content Header (Page header)
+	section.content-header
+		h1
+			| Organization
+			small Info
+		ol.breadcrumb
+			li
+				a(href='/api/v1/organize?access_token=' + token)
+					i.fa.fa-dashboard
+					|  Extensions
+			li
+				a(href='/api/v1/organize?access_token=' + token) groups
+			li.active Info
+
+	// Main content
+	section.content
+		.row
+			.col-md-3
+				// Profile Image
+				.box.box-primary
+					.box-body.box-profile
+						img.profile-user-img.img-responsive.img-circle(src='/AdminLTE-2.3.3/dist/img/conv-160x160.png', alt='User profile picture')
+						h3.profile-username.text-center NONE
+						p.text-muted.text-center License created at !{prettyDate(lic_created_at)}
+						ul.list-group.list-group-unbordered
+							li.list-group-item
+								b License
+								a.pull-right !{ext_lic}
+							li.list-group-item
+								b Extensions
+								a.lb-total-ext.pull-right 543
+							li.list-group-item
+								b Groups
+								a.lb-total-group.pull-right 13,287
+					// /.box-body
+				// /.box
+			// /.col
+			.col-md-9
+				.nav-tabs-custom
+					ul.nav.nav-tabs
+						li.active
+							a(href='#info', data-toggle='tab') Detail
+					.tab-content
+						#info.tab-pane.active
+							form#detailExtensionForm.form-horizontal
+								.form-group
+									label.col-sm-2.control-label(for='inputOrgName') Group Name
+									.col-sm-10
+										input#inputOrgName.form-control(name='name', type='text', placeholder='Name')
+										input#inputEditOrgName.form-control(name='orgnameval', type='hidden', value='')
+								.form-group
+									label.col-sm-2.control-label(for='inputParentOrg') Parent Group
+									.col-sm-4
+										//input#inputOrgName.form-control(type='text', placeholder='Organizations')
+										input.btn-orgname.form-control.org-line-green(name='orgname', type='checkbox')
+										input#inputEditOrgId.form-control(name='orgval', type='hidden', value='')
+										input#inputEditParentOrgId.form-control(type='hidden', value='')
+									.col-sm-6
+										
+								.form-group
+									label.col-sm-2.control-label(for='inputOrgBudget') Budget
+									.col-sm-10
+										input#inputOrgBudget.form-control(name='budget', type='text', placeholder='Budget')
+								.form-group
+									label.col-sm-2.control-label(for='inputExtCreated') Created At
+									.col-sm-10
+										input#inputExtCreated.form-control(type='text', placeholder='Created At', disabled='')
+								.form-group
+									label.col-sm-2.control-label(for='inputExtUpdated') Last Updated
+									.col-sm-10
+										input#inputExtUpdated.form-control(type='text', placeholder='Last Updated', disabled='')
+
+								.form-group
+									.col-sm-offset-2.col-sm-2.col-xs-2
+										button.btn-ext-update.btn.btn-success(type='button') Update
+									.col-sm-2.col-xs-2
+										button.btn-ext-delete.btn.btn-danger(type='button') Delete
+						// /.tab-pane
+	.modal.org-modal-list.fade(tabindex='-1', role='dialog')
+		.modal-dialog.modal-lg
+			.modal-content
+				.modal-header
+					button.close(type='button', data-dismiss='modal', aria-label='Close')
+						span(aria-hidden='true') ×
+					h4.modal-title Organize List 
+						//button.btn.btn-xs.btn-primary(type='button') TEST
+				.modal-body.modal-body-org-list
+					//p One fine body…
+				.modal-footer
+					button.btn-org-list-up.btn.btn-info(type='button')
+						i.fa.fa-chevron-left
+						|  Back
+					button.btn.btn-default(type='button', data-dismiss='modal') Cancel
+					button.btn-selected-org.btn.btn-primary(type='button') Select
+			// /.modal-content
+		// /.modal-dialog
+	// /.modal
+				
+block script
+	//script(type='text/javascript', src='/editable/bootstrap3-editable/js/bootstrap-editable.min.js')
+	//script(type='text/javascript', src='/bootstrap-select/dist/js/bootstrap-select.min.js')
+	//script(type='text/javascript', src='/javascripts/jquery.bootpag.min.js')
+	script(type='text/javascript', src='/javascripts/extensions.func.js')
+	script(type='text/javascript', src='/javascripts/organizations.func.js')
+	script(type='text/javascript').
+		$(document).ready(function() {
+			var selected_org = null,
+				selected_org_name = null,
+				selected_parent = null;
+			//Initialize Select2 Elements
+			$('.select2').select2();
+			
+			//iCheck for checkbox and radio inputs
+			$('input[type="checkbox"].minimal').iCheck({
+				checkboxClass: 'icheckbox_minimal-blue',
+				radioClass: 'iradio_minimal-blue'
+			});
+			
+			//Flat red color scheme for iCheck
+			/*$('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+				checkboxClass: 'icheckbox_flat-green',
+				radioClass: 'iradio_flat-green'
+			});*/
+			
+			getLicenseUsage("!{user}","!{ext_lic}","!{token}");
+			getGroupInfoById("!{user}","!{ext_lic}","!{token}","!{orgid}");
+			getTotalExtension("!{user}","!{ext_lic}","!{token}");
+			getTotalGroup("!{user}","!{ext_lic}","!{token}");
+			//getAllGroup("!{user}","!{ext_lic}","!{token}");
+			
+			// jQuery call event handler
+			
+			
+			
+			// end call event handler
+		});
+		
+		$(document).ajaxStart(function() { Pace.restart(); });

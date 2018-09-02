@@ -1,0 +1,20 @@
+extend ../layout
+
+block content
+  ul
+    li
+      a(href='./etbs-roles') Roles
+    li
+      a(href='./etbs-permissions') Permissions
+    li
+      a(href='./etbs-users') Users
+  h1 Roles Page
+  p Welcome to Roles Page
+  a(href='./etbs-roles/form') New
+  ul
+    each role in roles
+      li= 'rolename: ' + role.rolename + ', profileid: ' + role.profileid
+        a(href='./etbs-roles/' + role.rolename + '/' + role.profileid) Edit
+        = '-'
+        a(href='./etbs-roles/' + role.rolename + '/' + role.profileid + '/remove') Remove
+  

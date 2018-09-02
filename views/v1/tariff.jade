@@ -1,0 +1,205 @@
+extend ../layout
+
+block header
+    link(rel='stylesheet', href='/editable/bootstrap3-editable/css/bootstrap-editable.css')
+    link(rel='stylesheet', href='/bootstrap-select/dist/css/bootstrap-select.min.css')
+
+block content
+    section.content
+        .row
+            .col-md-12
+                h4
+                    select.tablepicker#providerTable(data-style='btn-primary')
+                        option(value='0') Table 0
+                        option(value='1') Table 1
+                        option(value='2') Table 2
+                        option(value='3') Table 3
+                        option(value='4') Table 4
+                        option(value='5') Table 5
+                        option(value='6') Table 6
+                        option(value='7') Table 7
+                        option(value='8') Table 8
+                        option(value='9') Table 9
+
+                    button.btn.btn-warning.btn-xs.pull-right(type='button', data-toggle='modal', data-target='#copyTableDialog', aria-labelledby='#copyTableTitle')
+                        i.fa.fa-copy  Copy Table
+                    .modal.fade#copyTableDialog(tabindex='-1', role='dialog')
+                        .modal-dialog(role='document')
+                            .modal-content
+                                .modal-header
+                                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                        span(aria-hidden='true') &times;
+                                    h4.modal_title#copyTableTable Copy Tariff Table
+                                .modal-body
+                                    .container-fluid
+                                        form#copyTableForm(role='form')
+                                            .form-group.has
+                                                label(for='srcTable') From
+                                                select.select2.form-control#srcTable(name='srcTable')
+                                                    option(value='0') Table 0
+                                                    option(value='1') Table 1
+                                                    option(value='2') Table 2
+                                                    option(value='3') Table 3
+                                                    option(value='4') Table 4
+                                                    option(value='5') Table 5
+                                                    option(value='6') Table 6
+                                                    option(value='7') Table 7
+                                                    option(value='8') Table 8
+                                                    option(value='9') Table 9
+                                            .form-group
+                                                label(for='destTable') To
+                                                select.select2.form-control#destTable(name='destTable')
+                                                    option(value='1') Table 1
+                                                    option(value='2') Table 2
+                                                    option(value='3') Table 3
+                                                    option(value='4') Table 4
+                                                    option(value='5') Table 5
+                                                    option(value='6') Table 6
+                                                    option(value='7') Table 7
+                                                    option(value='8') Table 8
+                                                    option(value='9') Table 9
+                                            .checkbox.small
+                                                label
+                                                    input(type='checkbox', checked)
+                                                    |   Copy Areacode Data
+                                            .checkbox.small
+                                                label
+                                                    input(type='checkbox', checked)
+                                                    |   Copy Rate Data
+                                .modal-footer
+                                    button.btn.btn-default(type='button', data-dismiss='modal') Close
+                                    button.btn.btn-success#save(type='submit') Save
+        .row
+            .col-md-12
+                .nav-tabs-custom
+                    ul.nav.nav-tabs
+                        li.active
+                            a(href='#areacodes', data-toggle='tab') Areacodes
+                        li
+                            a(href='#rates', data-toggle='tab') Rates
+                    .tab-content
+                        .tab-pane.active#areacodes
+                            .box.box-danger
+                                .box-header
+                                    button.btn.btn-success.btn-xs.pull-right(type='button', data-toggle='modal', data-target='#newAreacodeDialog', aria-labelledby='#newAreacodeTitle')
+                                        i.fa.fa-plus  New Areacode
+                                    .modal.fade#newAreacodeDialog(tabindex='-1', role='dialog')
+                                        .modal-dialog(role='document')
+                                            .modal-content
+                                                .modal-header
+                                                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                                        span(aria-hidden='true') &times;
+                                                    h4.modal_title#newAreacodeTitle Add New Areacode
+                                                .modal-body
+                                                    .container-fluid
+                                                        form#newAreacodeForm(role='form')
+                                                            .form-group.has-feedback
+                                                                label.control-label(for='newProvider') Provider
+                                                                input.form-control#newProvider(type='text', name='newProvider', placeholder='Enter provider code')
+                                                            .form-group
+                                                                label(for='newAreacode') Areacode
+                                                                input.form-control#newAreacode(type='text', name='newAreacode')
+                                                            .form-group
+                                                                label(for='newAreaname') Name
+                                                                input.form-control#newAreaname(type='text', name='newAreaname', placeholder='Enter area name')
+                                                            .form-group
+                                                                label(for='newToll') Toll Type
+                                                                select.select2.form-control#newToll(name='newToll')
+                                                                    option(selected) Free
+                                                                    option Local
+                                                                    option Domestic
+                                                                    option Mobile
+                                                                    option International
+                                                            .form-group
+                                                                label(for='newRate') Rate
+                                                                select.select2.form-control#newRate(name='newRate')
+                                                            .form-group
+                                                                input.form-control.disabled.hidden(type='text', name='tableId', value=table)
+                                                .modal-footer
+                                                    button.btn.btn-default(type='button', data-dismiss='modal') Close
+                                                    button.btn.btn-success#save(type='submit') Save
+                                .box-body
+                                    table.table.table-condensed#areacodesTable
+                                        thead
+                                            th.col-xs-2 Provider
+                                            th.col-xs-2 Areacode
+                                            th.col-xs-3 Name
+                                            th.col-xs-2 Toll
+                                            th.col-xs-3 Rate
+                                            th
+                                        tbody
+                                .box-footer
+                                    #areacodePages
+                        .tab-pane#rates
+                            .box.box-danger
+                                .box-header
+                                    button.btn.btn-success.btn-xs.pull-right(type='button', data-toggle='modal', data-target='#newRateDialog', aria-labelledby='#newRateTitle')
+                                        i.fa.fa-plus  New Rate
+                                    .modal.fade#newRateDialog(tabindex='-1', role='dialog')
+                                        .modal-dialog(role='document')
+                                            .modal-content
+                                                .modal-header
+                                                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                                        span(aria-hidden='true') &times;
+                                                    h4.modal_title#newRateTitle Add New Rate
+                                                .modal-body
+                                                    .container-fluid
+                                                        form#newRateForm(role='form')
+                                                            .form-group.has-feedback
+                                                                label.control-label(for='newRateId') Rate Id
+                                                                input.form-control#newRateId(type='text', name='newRateId', placeholder='Enter rate id')
+                                                            .form-group
+                                                                label(for='newRateName') Rate Name
+                                                                input.form-control#newRateName(type='text', name='newRateName', placeholder='Enter rate name')
+                                                            .form-group
+                                                                label(for='newDayOfWeek') Day Of Week
+                                                                select.select2.form-control#newDayOfWeek(name='newDayOfWeek')
+                                                                    option Any Day
+                                                                    option Weekday
+                                                                    option Holiday
+                                                                    option(disabled) ----------------------
+                                                                    option Monday
+                                                                    option Tuesday
+                                                                    option Wednesday
+                                                                    option Thursday
+                                                                    option Friday
+                                                                    option Saturday
+                                                                    option Sunday
+
+                                                            .form-group
+                                                                label(for='newStartTime') Start Time
+                                                                input.form-control#newStartTime(type='text', name='newStartTime', placeholder='Enter start time')
+                                                            form-group
+                                                                label(for='newEndTime') End Time
+                                                                input.form-control#newEndTime(type='text', name='newEndTime', placeholder='Enter end time')
+                                                            .form-group
+                                                                label(for='newCharge') Charging
+                                                                input.form-control#newCharge(type='text', name='newCharge', placeholder='Enter charging rate in JSON Array format')
+                                                            .form-group
+                                                                input.form-control.disabled.hidden(type='text', name='tableId', value=table)
+                                                .modal-footer
+                                                    button.btn.btn-default(type='button', data-dismiss='modal') Close
+                                                    button.btn.btn-success#save(type='submit') Save
+                                .box-body
+                                    table.table.table-condensed#ratesTable
+                                        thead
+                                            th.col-xs-2 Rate ID
+                                            th.col-xs-2 Rate Name
+                                            th.col-xs-2 Day Of Week
+                                            th.col-xs-2 Start Time
+                                            th.col-xs-2 End Time
+                                            th.col-xs-2 Charging
+                                            th
+                                        tbody
+                                .box-footer
+                                    #ratePages
+
+block script
+    script(type='text/javascript').
+        var rowPerPage = 9;
+        var rateList = [];
+
+    script(type='text/javascript', src='/editable/bootstrap3-editable/js/bootstrap-editable.min.js')
+    script(type='text/javascript', src='/bootstrap-select/dist/js/bootstrap-select.min.js')
+    script(type='text/javascript', src='/javascripts/jquery.bootpag.min.js')
+    script(type='text/javascript', src='/javascripts/tariff.js')

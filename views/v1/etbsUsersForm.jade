@@ -1,0 +1,14 @@
+extend ../layout
+
+block content
+  h1 Users Page
+  p Welcome to Users Form page
+  form(method='POST' action='/etbs-users/insert')
+    div.form-group
+      label(for='username') Username:
+      input#username.form-control(type='text', placeholder='Username' name='username')
+    div.form-group
+      label(for='rolename') Role Name:
+      input#rolename.form-control(type='text', placeholder='Role Name' name='rolename')
+    button.btn.btn-primary(type='submit') Submit
+  

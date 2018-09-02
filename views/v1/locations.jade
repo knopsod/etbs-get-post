@@ -1,0 +1,96 @@
+extend ../layout
+
+block header
+    link(rel='stylesheet', href='/editable/bootstrap3-editable/css/bootstrap-editable.css')
+
+block content
+    section.content
+        .row
+            .col-md-12
+                .box.box-danger
+                    .box-header
+                        h3.box-title Locations
+                        button.btn.btn-success.btn-xs.pull-right(type='button', data-toggle='modal', data-target='#newLocationDialog', aria-labelledby='#dialogTitle')
+                            i.fa.fa-plus  New Location
+                        .modal.fade#newLocationDialog(tabindex='-1', role='dialog')
+                            .modal-dialog(role='document')
+                                .modal-content
+                                    .modal-header
+                                        button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                            span(aria-hidden='true') &times;
+                                        h4.modal-title#dialogTitle Add New Location
+                                    .modal-body
+                                        .container-fluid
+                                            form#newLocationForm(role='form')
+                                                .form-group.has-feedback
+                                                    label.control-label(for='newLocation') Location
+                                                    input.form-control#newLocation(type='text', name='newLocation', placeholder='Enter location name', required)
+                                                .form-group
+                                                    label(for='newModel') Charging Model
+                                                    input.form-control#newModel(type='text', name='newModel', value='standard', readonly)
+                                                .form-group
+                                                    label(for='newRoute') Route
+                                                    input.form-control#newRoute(type='text', name='newRoute', placeholder='Enter route name')
+                                                .form-group
+                                                    label(for='newTrunk') Trunk
+                                                    input.form-control#newTrunk(type='text', name='newTrunk', placeholder='Enter trunk name')
+                                                .form-group
+                                                    label(for='newTariff') Tariff Table
+                                                    select.select2.form-control#newTariff(name='newTariff')
+                                                        option(selected='selected') 0
+                                                        option 1
+                                                        option 2
+                                                        option 3
+                                                        option 4
+                                                        option 5
+                                                        option 6
+                                                        option 7
+                                                        option 8
+                                                        option 9
+                                                .form-group
+                                                    label(for='newPrefix') Prefix
+                                                    input.form-control#newPrefix(type='text', name='newPrefix', placeholder='Enter reqex')
+                                                .form-group
+                                                    label(for='newProvider') Provider
+                                                    input.form-control#newProvider(type='text', name='newProvider', placeholder='Enter regex')
+                                    .modal-footer
+                                        button.btn.btn-default(type='button', data-dismiss='modal') Close
+                                        button.btn.btn-success#save(type='submit') Save
+                    .box-body
+                        table.table.table-condensed
+                            thead
+                                th Location
+                                th Model
+                                th Route
+                                th Trunk
+                                th(style='width: 100px') Tariff
+                                th Prefix
+                                th Provider
+                                th
+                            tbody
+                                - for row in data
+                                    tr
+                                        td
+                                            a.editable(href='#', data-name='location', data-type='text', data-pk=row.location, data-title='Enter location name')= row.location
+                                        td #{row.model}
+                                        td
+                                            a.editable(href='#', data-name='route', data-type='text', data-pk=row.location, data-title='Enter route')= row.route
+                                        td
+                                            a.editable(href='#', data-name='trunk', data-type='text', data-pk=row.location, data-title='Enter trunk')= row.trunk
+                                        td
+                                            a.edit-tariff(href='#', data-name='tariff', data-type='select', data-pk=row.location, data-title='Select tariff table')= row.tariff.trim()
+                                        td
+                                            //a.editable(href='#', data-name='prefix', data-type='text', data-pk=row.location, data-title='Enter regex for prefix')= row.prefix.trim()
+
+                                            a.editable(href='#', data-name='prefix', data-type='text', data-pk=row.location, data-title='Enter regex for prefix')= (interp = row.prefix) == null ? '' : interp.trim()
+                                        td
+                                            //a.editable(href='#', data-name='provider', data-type='text', data-pk=row.location, data-title='Enter regex for provider')= row.provider.trim()
+
+                                            a.editable(href='#', data-name='provider', data-type='text', data-pk=row.location, data-title='Enter regex for provider')= (interp = row.provider) == null ? '' : interp.trim()
+                                        td.text-right
+                                            a.btn.btn-warning.btn-xs.delete(href='/api/v1/locations/' + row.location)
+                                                i.fa.fa-trash
+
+block script
+    script(type='text/javascript', src='/editable/bootstrap3-editable/js/bootstrap-editable.min.js')
+    script(type='text/javascript', src='/javascripts/locations.js')

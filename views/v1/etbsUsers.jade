@@ -1,0 +1,18 @@
+extend ../layout
+
+block content
+  ul
+    li
+      a(href='./etbs-roles') Roles
+    li
+      a(href='./etbs-permissions') Permissions
+    li
+      a(href='./etbs-users') Users
+  h1= Users
+  p Welcome to Users page
+  a(href='./etbs-users/form') New
+  ul
+    each user in users
+      li='username: ' + user.username + ', rolename: ' + user.rolename
+  
+  
