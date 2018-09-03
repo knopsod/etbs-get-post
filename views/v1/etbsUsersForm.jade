@@ -1,6 +1,13 @@
 extend ../layout
 
 block content
+  ul
+    li
+      a(href='/etbs-roles') Roles
+    li
+      a(href='/etbs-permissions') Permissions
+    li
+      a(href='/etbs-users') Users
   h1 Users Page
   p Welcome to Users Form page
   form(method='POST' action=action)
@@ -17,7 +24,7 @@ block content
     if cnt != undefined
       div.form-group
         label(for='cnt') Users:
-          a(href= '/etbs-users/groups/' + username + '/' + rolename)= cnt + ' group(s)'
+          a(href= '/etbs-users/user-group/' + username)= cnt + ' group(s)'
     if action == '/etbs-users/insert'
       button.btn.btn-primary(type='submit') Create
     else if action == '/etbs-users/update'

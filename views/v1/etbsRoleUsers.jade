@@ -13,16 +13,17 @@ block content
     strong= rolename
   ul
     each user in users
-      li= 'username: ' + user.username + ', rolename: ' + user.rolename
+      li= 'User: ' + user.username + ', Role: ' + user.rolename
         form(method='POST' action='/etbs-roles/users/delete')
           input#username(type='hidden' name='username' value=user.username)
           input#rolename(type='hidden' name='rolename' value=rolename)
           input#profileid(type='hidden' name='profileid' value=profileid)
           button.btn.btn-primary(type='submit') Remove
   hr
+  p User list
   ul
     each user in unRoleUsers
-      li= 'username: ' + user.username + ', rolename: ' + user.rolename
+      li= 'User: ' + user.username + ', Role: ' + user.rolename
         form(method='POST' action='/etbs-roles/users/insert')
           input#username(type='hidden' name='username' value=user.username)
           input#rolename(type='hidden' name='rolename' value=rolename)

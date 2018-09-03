@@ -1,0 +1,29 @@
+extend ../layout
+
+block content
+  ul
+    li
+      a(href='/etbs-roles') Roles
+    li
+      a(href='/etbs-permissions') Permissions
+    li
+      a(href='/etbs-users') Users
+  h1 User Groups Page
+  p Welcome to User Groups Page : 
+    strong= username
+  ul
+    each group in groups
+      li= 'Username: ' + group.username + ', Group: ' + group.group_name
+        form(method='POST' action='/etbs-users/user-group/delete')
+          input#username(type='hidden' name='username' value=group.username)
+          input#groupId(type='hidden' name='groupId' value=group.group_id)
+          button.btn.btn-primary(type='submit') Remove
+  hr
+  p Group list
+  ul
+    each unGroup in unGroups
+      li= 'Id: ' + unGroup.group_id + ', Name: ' + unGroup.group_name
+        form(method='POST' action='/etbs-users/user-group/insert')
+          input#preUsername(type='hidden' name='preUsername' value=username)
+          input#unGroupId(type='hidden' name='unGroupId' value=unGroup.group_id)
+          button.btn.btn-primary(type='submit') Add

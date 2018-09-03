@@ -14,8 +14,8 @@ block content
   ul
     each user in users
       li='username: ' + user.username + ', rolename: ' + user.rolename
-        a(href='/etbs-users/edit/' + user.username + '/' + user.rolename) Edit
+        a(href='/etbs-users/edit/' + user.username) Edit
         = '-'
-        a(href='/etbs-users/remove/' + user.username + '/' + user.rolename) Remove
+        a(href='/etbs-users/remove/' + user.username) Remove
   
   
