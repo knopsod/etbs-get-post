@@ -1,0 +1,24 @@
+extend ../layout
+
+block content
+  ul
+    li
+      a(href='/etbs-roles') Roles
+    li
+      a(href='/etbs-permissions') Permissions
+    li
+      a(href='/etbs-users') Users
+  h1 Permissions Role Page
+  p Welcome to Permission Role Page : 
+    strong= permission
+    |  has 
+    strong= rolename
+  ul
+    each role in roles
+      li= 'rolename: ' + role.rolename
+        form(method='POST' action='/etbs-permissions/roles/update')
+          input#permission(type='hidden' name='permission' value=permission)
+          input#profileid(type='hidden' name='profileid' value=profileid)
+          input#perm_type(type='hidden' name='perm_type' value=perm_type)
+          input#roleProfileid(type='hidden' name='roleProfileid' value=role.profileid)
+          button.btn.btn-primary(type='submit') Assign ROLE to this PERMISSION

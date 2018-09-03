@@ -14,7 +14,7 @@ block content
     div.form-group
       label(for='profileid') Profile ID:
       input#profileid.form-control(type='text', placeholder='Profile ID' name='profileid' value=profileid)
-    if cnt !== undefined
+    if cnt != undefined
       div.form-group
         label(for='cnt') Users:
           a(href= '/etbs-roles/users/' + rolename + '/' + profileid)= cnt + ' user(s)'

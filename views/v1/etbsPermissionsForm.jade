@@ -19,6 +19,10 @@ block content
     div.form-group
       label(for='perm_type') Permission Type:
       input#perm_type.form-control(type='text', placeholder='Profile ID' name='perm_type' value=perm_type)
+    if rolename != undefined
+      div.form-group
+        label(for='rolename') Role : 
+          a(href= '/etbs-permissions/roles/' + permission + '/' + profileid + '/' + perm_type)= rolename
     if action == '/etbs-permissions/insert'
       button.btn.btn-primary(type='submit') Create
     else if action == '/etbs-permissions/update'
