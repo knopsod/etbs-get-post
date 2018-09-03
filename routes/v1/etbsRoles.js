@@ -33,7 +33,7 @@ router.post('/insert', function(req, res, next) {
   
   if (conn) {
     
-    var sql = "INSERT INTO roles SET ?";
+    var sql = 'INSERT INTO roles SET ?';
     var role = {
       rolename: rolename,
       profileid: profileid
@@ -53,7 +53,7 @@ router.get('/edit/:rolename/:profileid', function(req, res, next) {
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = "SELECT COUNT(1) AS cnt FROM users WHERE rolename = ?";
+    var sql = 'SELECT COUNT(1) AS cnt FROM users WHERE rolename = ?';
     var conditions = [rolename];
 
     conn.query(sql, conditions, function (err, result) {
@@ -82,14 +82,17 @@ router.post('/update', function(req, res, next) {
 
   if (conn) {
 
-    var sql = "UPDATE roles SET ? "
-      + "WHERE rolename = '" + originRolename + "' AND profileid = '" + originProfileid + "' ";
-    var role = {
-      rolename: rolename,
-      profileid: profileid
-    };
+    var sql = 'UPDATE roles SET ? WHERE rolename = ? AND profileid = ?';
+    var setditions = [
+      {
+        rolename: rolename,
+        profileid: profileid
+      },
+      originRolename,
+      originProfileid
+    ];
 
-    conn.query(sql, role, function (err, result) {
+    conn.query(sql, setditions, function (err, result) {
       res.redirect('/etbs-roles');
       conn.end();
     });
@@ -104,7 +107,7 @@ router.get('/remove/:rolename/:profileid', function(req, res, next) {
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = "SELECT COUNT(1) AS cnt FROM users WHERE rolename = ?";
+    var sql = 'SELECT COUNT(1) AS cnt FROM users WHERE rolename = ?';
     var conditions = [rolename];
 
     conn.query(sql, conditions, function (err, result) {
@@ -130,8 +133,7 @@ router.post('/delete', function(req, res, next) {
 
   if (conn) {
 
-    var sql = "DELETE FROM roles "
-      + "WHERE rolename = ? AND profileid = ? ";
+    var sql = 'DELETE FROM roles WHERE rolename = ? AND profileid = ?';
     var conditions = [originRolename, originProfileid];
 
     conn.query(sql, conditions, function (err, result) {
@@ -187,8 +189,7 @@ router.post('/users/insert', function(req, res, next) {
 
   if (conn) {
 
-    var sql = "UPDATE users SET ? "
-      + "WHERE username = ? ";
+    var sql = 'UPDATE users SET ? WHERE username = ?';
     var setditions = [
       { rolename: rolename },
       username
@@ -212,8 +213,7 @@ router.post('/users/delete', function(req, res, next) {
 
   if (conn) {
 
-    var sql = "UPDATE users SET ? "
-      + "WHERE username = ? ";
+    var sql = 'UPDATE users SET ? WHERE username = ?';
     var setditions = [
       { rolename: '' },
       username

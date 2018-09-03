@@ -3,12 +3,25 @@ extend ../layout
 block content
   h1 Users Page
   p Welcome to Users Form page
-  form(method='POST' action='/etbs-users/insert')
+  form(method='POST' action=action)
+    if username != undefined
+      input#originUsername(type='hidden' name='originUsername' value=username)
+    if rolename != undefined
+      input#originRolename(type='hidden' name='originRolename' value=rolename)
     div.form-group
       label(for='username') Username:
-      input#username.form-control(type='text', placeholder='Username' name='username')
+      input#username.form-control(type='text', placeholder='Username' name='username' value=username)
     div.form-group
       label(for='rolename') Role Name:
-      input#rolename.form-control(type='text', placeholder='Role Name' name='rolename')
-    button.btn.btn-primary(type='submit') Submit
+      input#rolename.form-control(type='text', placeholder='Role Name' name='rolename' value=rolename)
+    if cnt != undefined
+      div.form-group
+        label(for='cnt') Users:
+          a(href= '/etbs-users/groups/' + username + '/' + rolename)= cnt + ' group(s)'
+    if action == '/etbs-users/insert'
+      button.btn.btn-primary(type='submit') Create
+    else if action == '/etbs-users/update'
+      button.btn.btn-primary(type='submit') Save
+    else
+      button.btn.btn-primary(type='submit') Remove
   

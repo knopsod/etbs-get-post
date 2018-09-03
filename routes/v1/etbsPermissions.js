@@ -32,11 +32,14 @@ router.post('/insert', function(req, res, next) {
 
   if (conn) {
 
-    var sql = "INSERT INTO permissions (permission, profileid, perm_type) "
-      + "VALUES ('" + permission + "', '" + profileid + "', '" + perm_type + "')";
+    var sql = 'INSERT INTO permissions SET ?';
+    var perm = {
+      permission: permission,
+      profileid: profileid,
+      perm_type: perm_type
+    };
 
-    conn.query(sql,
-    function (err, result) {
+    conn.query(sql, perm, function (err, result) {
       res.redirect('/etbs-permissions');
       conn.end();
     });
@@ -52,7 +55,7 @@ router.get('/edit/:permission/:profileid/:perm_type', function(req, res, next) {
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = "SELECT rolename, profileid FROM roles WHERE profileid = ? LIMIT 1 OFFSET 0";
+    var sql = 'SELECT rolename, profileid FROM roles WHERE profileid = ? LIMIT 1 OFFSET 0';
     var conditions = [profileid];
 
     conn.query(sql, conditions, function (err, result) {
@@ -84,8 +87,7 @@ router.post('/update', function(req, res, next) {
 
   if (conn) {
 
-    var sql = "UPDATE permissions SET ? "
-      + "WHERE permission = ? AND profileid = ? AND perm_type = ? ";
+    var sql = 'UPDATE permissions SET ? WHERE permission = ? AND profileid = ? AND perm_type = ?';
     var setditions = [
       {
         permission: permission,
@@ -113,7 +115,7 @@ router.get('/remove/:permission/:profileid/:perm_type', function(req, res, next)
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = "SELECT rolename, profileid FROM roles WHERE profileid = ? LIMIT 1 OFFSET 0";
+    var sql = 'SELECT rolename, profileid FROM roles WHERE profileid = ? LIMIT 1 OFFSET 0';
     var conditions = [profileid];
 
     conn.query(sql, conditions, function (err, result) {
@@ -141,8 +143,7 @@ router.post('/delete', function(req, res, next) {
 
   if (conn) {
 
-    var sql = "DELETE FROM permissions "
-      + "WHERE permission = ? AND profileid = ? AND perm_type = ? ";
+    var sql = 'DELETE FROM permissions WHERE permission = ? AND profileid = ? AND perm_type = ?';
     var conditions = [originPermission, originProfileid, originPerm_type];
 
     conn.query(sql, conditions, function (err, result) {
@@ -199,8 +200,7 @@ router.post('/roles/update', function(req, res, next) {
 
   if (conn) {
 
-    var sql = "UPDATE permissions SET ? "
-      + "WHERE permission = ? AND profileid = ? AND perm_type = ? ";
+    var sql = 'UPDATE permissions SET ? WHERE permission = ? AND profileid = ? AND perm_type = ?';
     var setditions = [
       { profileid: roleProfileid },
       permission,
