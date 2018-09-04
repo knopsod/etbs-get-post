@@ -1,0 +1,38 @@
+extend ../layout
+
+block content
+  ul
+    li
+      a(href='/etbs-roles') Roles
+    li
+      a(href='/etbs-permissions') Permissions
+    li
+      a(href='/etbs-users') Users
+  h1 Role Permissions Page
+  p Welcome to Role Permissions Page : 
+    strong= rolename
+    |  has these permission
+  p Permissions are include in this role
+  ul
+    each perm in permissions
+      li= 'Permission: ' + perm.permission
+        form(method='POST' action='/etbs-roles/permissions/delete')
+          input#rolename(type='hidden' name='rolename' value=rolename)
+          input#permission(type='hidden' name='permission' value=perm.permission)
+          input#profileid(type='hidden' name='profileid' value=perm.profileid)
+          input#perm_type(type='hidden' name='perm_type' value=perm.perm_type)
+          button.btn.btn-primary(type='submit') Remove
+  hr
+  p Permissions are 
+    strong(style='{color: 0xf00}') not
+    |  include in this role
+  ul
+    each perm in unPermissions
+      li= 'Permission: ' + perm.permission
+        form(method='POST' action='/etbs-roles/permissions/insert')
+          input#rolename(type='hidden' name='rolename' value=rolename)
+          input#permission(type='hidden' name='permission' value=perm.permission)
+          input#originProfileid(type='hidden' name='originProfileid' value=profileid)
+          input#profileid(type='hidden' name='profileid' value=perm.profileid)
+          input#perm_type(type='hidden' name='perm_type' value=perm.perm_type)
+          button.btn.btn-primary(type='submit') Add
