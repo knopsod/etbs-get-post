@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = "SELECT rolename, profileid FROM roles";
+    var sql = "SELECT rolename, profileid, is_active FROM roles";
 
     conn.query(sql,
     function (err, result) {
@@ -28,6 +28,7 @@ router.get('/add', function(req, res, next) {
 router.post('/insert', function(req, res, next) {
   var rolename = req.body.rolename;
   var profileid = req.body.profileid;
+  var is_active = req.body.is_active;
   
   var conn = database.getConnection();
   
@@ -36,7 +37,8 @@ router.post('/insert', function(req, res, next) {
     var sql = 'INSERT INTO roles SET ?';
     var role = {
       rolename: rolename,
-      profileid: profileid
+      profileid: profileid,
+      is_active: is_active
     };
 
     conn.query(sql, role, function (err, result) {
@@ -50,39 +52,48 @@ router.get('/edit/:rolename/:profileid', function(req, res, next) {
   var rolename = req.params.rolename;
   var profileid = req.params.profileid;
 
+  var is_active = '';
+
   var cnt = '';
+  var permsCnt = '';
 
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = 'SELECT COUNT(1) AS cnt FROM users WHERE rolename = ?';
-    var conditions = [rolename];
+    var sql = 'SELECT is_active FROM roles WHERE rolename = ? AND profileid = ? LIMIT 1 OFFSET 0';
+    var conditions = [rolename, profileid];
 
-    conn.query(sql, conditions, function (err, result) {
-      cnt = result.length ? result[0].cnt : 0;
+    conn.query(sql, conditions, function (err, fieldResult) {
+      is_active = fieldResult.length ? fieldResult[0].is_active : '';
 
-      if (result) {
-        var sql = 'SELECT COUNT(1) AS cnt FROM permissions WHERE profileid = ?';
-        var conditions = [profileid];
-
-        conn.query(sql, conditions, function (err, permsResult) {
-          var permsCnt = permsResult.length ? permsResult[0].cnt : 0;
-
-          res.render('v1/etbsRolesForm', {
-            action: '/etbs-roles/update',
-            rolename: rolename,
-            profileid: profileid,
-            cnt: cnt,
-            permsCnt: permsCnt
+      var sql = 'SELECT COUNT(1) AS cnt FROM users WHERE rolename = ?';
+      var conditions = [rolename];
+  
+      conn.query(sql, conditions, function (err, result) {
+        cnt = result.length ? result[0].cnt : 0;
+  
+        if (result) {
+          var sql = 'SELECT COUNT(1) AS cnt FROM permissions WHERE profileid = ?';
+          var conditions = [profileid];
+  
+          conn.query(sql, conditions, function (err, permsResult) {
+            permsCnt = permsResult.length ? permsResult[0].cnt : 0;
+  
+            res.render('v1/etbsRolesForm', {
+              action: '/etbs-roles/update',
+              rolename: rolename,
+              profileid: profileid,
+              is_active: is_active,
+              cnt: cnt,
+              permsCnt: permsCnt
+            });
+      
+            conn.end();
           });
-    
-          conn.end();
-        });
-      }
-
+        }
+      });
     });
   }
-
 });
 
 router.post('/update', function(req, res, next) {
@@ -117,23 +128,46 @@ router.get('/remove/:rolename/:profileid', function(req, res, next) {
   var rolename = req.params.rolename;
   var profileid = req.params.profileid;
 
+  var is_active = '';
+
+  var cnt = '';
+  var permsCnt = '';
+
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = 'SELECT COUNT(1) AS cnt FROM users WHERE rolename = ?';
-    var conditions = [rolename];
+    var sql = 'SELECT is_active FROM roles WHERE rolename = ? AND profileid = ? LIMIT 1 OFFSET 0';
+    var conditions = [rolename, profileid];
 
-    conn.query(sql, conditions, function (err, result) {
-      var cnt = result.length ? result[0].cnt : 0;
+    conn.query(sql, conditions, function (err, fieldResult) {
+      is_active = fieldResult.length ? fieldResult[0].is_active : '';
 
-      res.render('v1/etbsRolesForm', {
-        action: '/etbs-roles/delete',
-        rolename: rolename,
-        profileid: profileid,
-        cnt: cnt
+      var sql = 'SELECT COUNT(1) AS cnt FROM users WHERE rolename = ?';
+      var conditions = [rolename];
+  
+      conn.query(sql, conditions, function (err, result) {
+        cnt = result.length ? result[0].cnt : 0;
+  
+        if (result) {
+          var sql = 'SELECT COUNT(1) AS cnt FROM permissions WHERE profileid = ?';
+          var conditions = [profileid];
+  
+          conn.query(sql, conditions, function (err, permsResult) {
+            permsCnt = permsResult.length ? permsResult[0].cnt : 0;
+  
+            res.render('v1/etbsRolesForm', {
+              action: '/etbs-roles/delete',
+              rolename: rolename,
+              profileid: profileid,
+              is_active: is_active,
+              cnt: cnt,
+              permsCnt: permsCnt
+            });
+      
+            conn.end();
+          });
+        }
       });
-
-      conn.end();
     });
   }
 });

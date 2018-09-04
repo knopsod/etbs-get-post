@@ -13,7 +13,7 @@ block content
   a(href='/etbs-roles/add') New
   ul
     each role in roles
-      li= 'rolename: ' + role.rolename + ', profileid: ' + role.profileid
+      li= 'rolename: ' + role.rolename + ', profileid: ' + role.profileid + ', is_active: ' + role.is_active
         a(href='/etbs-roles/edit/' + role.rolename + '/' + role.profileid) Edit
         = '-'
         a(href='/etbs-roles/remove/' + role.rolename + '/' + role.profileid) Remove
