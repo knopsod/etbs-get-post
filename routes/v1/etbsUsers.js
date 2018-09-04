@@ -7,7 +7,9 @@ router.get('/', function(req, res, next) {
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = "SELECT username, rolename FROM users";
+    var sql = `SELECT username, clientid, rolename, extension, name, 
+      logo, company, email, mobile, fax, is_active 
+    FROM users`;
 
     conn.query(sql,
     function (err, result) {
@@ -24,8 +26,16 @@ router.get('/add', function(req, res, next) {
 });
 
 router.post('/insert', function(req, res, next) {
-  var username = req.body.username;
-  var rolename = req.body.rolename;
+  var username  = req.body.username;
+  var clientid  = req.body.clientid;
+  var extension = req.body.extension;
+  var name      = req.body.name;
+  var logo      = req.body.logo;
+  var company   = req.body.company;
+  var email     = req.body.email;
+  var mobile    = req.body.mobile;
+  var fax       = req.body.fax;
+  var is_active = req.body.is_active;
 
   var conn = database.getConnection();
 
@@ -33,8 +43,16 @@ router.post('/insert', function(req, res, next) {
 
     var sql = 'INSERT INTO users SET ?';
     var user = {
-      username: username,
-      rolename: rolename
+      username  : username,
+      clientid  : clientid,
+      extension : extension,
+      name      : name,
+      logo      : logo,
+      company   : company,
+      email     : email,
+      mobile    : mobile,
+      fax       : fax,
+      is_active : is_active
     };
 
     conn.query(sql, user, function (err, result) {
@@ -47,28 +65,63 @@ router.post('/insert', function(req, res, next) {
 
 router.get('/edit/:username', function(req, res, next) {
   var username = req.params.username;
-  var rolename = '';
+
+  var clientid  = '';
+  var extension = '';
+  var name      = '';
+  var logo      = '';
+  var company   = '';
+  var email     = '';
+  var mobile    = '';
+  var fax       = '';
+  var is_active = '';
+  
+  var rolename  = '';
+  var cnt       = '';
 
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = 'SELECT rolename FROM users WHERE username = ?';
+    var sql = `SELECT clientid, extension, name, logo, company, 
+      email, mobile, fax, is_active, rolename 
+    FROM users WHERE username = ? LIMIT 1 OFFSET 0`;
     var conditions = [username];
 
     conn.query(sql, conditions, function (err, result) {
-      rolename = result.length ? result[0].rolename : '';
+      clientid  = result.length ? result[0].clientid : '';
+      extension = result.length ? result[0].extension : '';
+      name      = result.length ? result[0].name : '';
+      logo      = result.length ? result[0].logo : '';
+      company   = result.length ? result[0].company : '';
+      email     = result.length ? result[0].email : '';
+      mobile    = result.length ? result[0].mobile : '';
+      fax       = result.length ? result[0].fax : '';
+      is_active = result.length ? result[0].is_active : '';
+      
+      if (result.length) {
+        rolename  = result[0].rolename ? result[0].rolename : '';
+      }
 
       var sql = 'SELECT COUNT(1) AS cnt FROM user_group WHERE username = ?';
       var conditions = [username];
 
       conn.query(sql, conditions, function (err, resultCnt) {
-        var cnt = resultCnt.length ? resultCnt[0].cnt : 0;
+        cnt = resultCnt.length ? resultCnt[0].cnt : 0;
 
         res.render('v1/etbsUsersForm', {
-          action: '/etbs-users/update',
-          username: username,
-          rolename: rolename,
-          cnt: cnt
+          action    : '/etbs-users/update',
+          username  : username,
+          clientid  : clientid,
+          extension : extension,
+          name      : name,
+          logo      : logo,
+          company   : company,
+          email     : email,
+          mobile    : mobile,
+          fax       : fax,
+          is_active : is_active,
+          rolename  : rolename,
+          cnt       : cnt
         });
 
         conn.end();
@@ -79,8 +132,17 @@ router.get('/edit/:username', function(req, res, next) {
 
 router.post('/update', function(req, res, next) {
   var originUsername = req.body.originUsername;
-  var username = req.body.username;
-  var rolename = req.body.rolename;
+
+  var username  = req.body.username;
+  var clientid  = req.body.clientid;
+  var extension = req.body.extension;
+  var name      = req.body.name;
+  var logo      = req.body.logo;
+  var company   = req.body.company;
+  var email     = req.body.email;
+  var mobile    = req.body.mobile;
+  var fax       = req.body.fax;
+  var is_active = req.body.is_active;
 
   var conn = database.getConnection();
 
@@ -89,8 +151,16 @@ router.post('/update', function(req, res, next) {
     var sql = 'UPDATE users SET ? WHERE username = ?';
     var setditions = [
       {
-        username: username,
-        rolename: rolename
+        username  : username,
+        clientid  : clientid,
+        extension : extension,
+        name      : name,
+        logo      : logo,
+        company   : company,
+        email     : email,
+        mobile    : mobile,
+        fax       : fax,
+        is_active : is_active
       },
       originUsername
     ];
@@ -105,28 +175,63 @@ router.post('/update', function(req, res, next) {
 
 router.get('/remove/:username', function(req, res, next) {
   var username = req.params.username;
-  var rolename = '';
+
+  var clientid  = '';
+  var extension = '';
+  var name      = '';
+  var logo      = '';
+  var company   = '';
+  var email     = '';
+  var mobile    = '';
+  var fax       = '';
+  var is_active = '';
+  
+  var rolename  = '';
+  var cnt       = '';
 
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = 'SELECT rolename FROM users WHERE username = ?';
+    var sql = `SELECT clientid, extension, name, logo, company, 
+      email, mobile, fax, is_active, rolename 
+    FROM users WHERE username = ? LIMIT 1 OFFSET 0`;
     var conditions = [username];
 
     conn.query(sql, conditions, function (err, result) {
-      rolename = result.length ? result[0].rolename : '';
+      clientid  = result.length ? result[0].clientid : '';
+      extension = result.length ? result[0].extension : '';
+      name      = result.length ? result[0].name : '';
+      logo      = result.length ? result[0].logo : '';
+      company   = result.length ? result[0].company : '';
+      email     = result.length ? result[0].email : '';
+      mobile    = result.length ? result[0].mobile : '';
+      fax       = result.length ? result[0].fax : '';
+      is_active = result.length ? result[0].is_active : '';
+      
+      if (result.length) {
+        rolename  = result[0].rolename ? result[0].rolename : '';
+      }
 
       var sql = 'SELECT COUNT(1) AS cnt FROM user_group WHERE username = ?';
       var conditions = [username];
 
       conn.query(sql, conditions, function (err, resultCnt) {
-        var cnt = resultCnt.length ? resultCnt[0].cnt : 0;
+        cnt = resultCnt.length ? resultCnt[0].cnt : 0;
 
         res.render('v1/etbsUsersForm', {
-          action: '/etbs-users/delete',
-          username: username,
-          rolename: rolename,
-          cnt: cnt
+          action    : '/etbs-users/delete',
+          username  : username,
+          clientid  : clientid,
+          extension : extension,
+          name      : name,
+          logo      : logo,
+          company   : company,
+          email     : email,
+          mobile    : mobile,
+          fax       : fax,
+          is_active : is_active,
+          rolename  : rolename,
+          cnt       : cnt
         });
 
         conn.end();
