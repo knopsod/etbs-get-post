@@ -254,7 +254,7 @@ router.get('/get', function(req, res, next) {
     sql += sort ? ' ORDER BY permission' : '';
 
     conn.query(sql, '%' + filter + '%', function (err, result) {
-      res.render('v1/etbsPermissions', { permissions: result, sort: sort });
+      res.render('v1/etbsPermissions', { permissions: result, sort: sort, filter: filter });
       conn.end();
     });
   }

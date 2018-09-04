@@ -12,7 +12,7 @@ block content
   p Welcome to Users page
   a(href='/etbs-users/add') New
   form(method='GET' action='/etbs-users/get')
-    input#filter(type='text' placeholder='Username...' name='filter')
+    input#filter(type='text' placeholder='Username...' name='filter' value=filter)
     input#sort(type='checkbox' name='sort' value='1' checked=sort ? true : false)
   ul
     each user in users

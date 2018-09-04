@@ -408,7 +408,7 @@ router.get('/get', function(req, res, next) {
     sql += sort ? ' ORDER BY username' : '';
 
     conn.query(sql, '%' + filter + '%', function (err, result) {
-      res.render('v1/etbsUsers', { users: result, sort: sort });
+      res.render('v1/etbsUsers', { users: result, sort: sort, filter: filter });
       conn.end();
     });
   }

@@ -12,7 +12,7 @@ block content
   p Welcome to Permissions Page
   a(href='/etbs-permissions/add') New
   form(method='GET' action='/etbs-permissions/get')
-    input#filter(type='text' placeholder='Permission...' name='filter')
+    input#filter(type='text' placeholder='Permission...' name='filter' value=filter)
     input#sort(type='checkbox' name='sort' value='1' checked=sort ? true : false)
   ul
     each perm in permissions
