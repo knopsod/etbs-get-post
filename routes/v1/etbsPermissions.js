@@ -241,6 +241,7 @@ router.post('/roles/update', function(req, res, next) {
 
 router.get('/get', function(req, res, next) {
   var filter = req.query.filter;
+  var sort = req.query.sort;
   var conn = database.getConnection();
 
   if (conn) {
@@ -248,10 +249,12 @@ router.get('/get', function(req, res, next) {
     FROM permissions
     WHERE 1`;
 
-    sql += filter ? ' AND permission LIKE ?': '';
+    sql += filter ? ' AND permission LIKE ?' : '';
+
+    sql += sort ? ' ORDER BY permission' : '';
 
     conn.query(sql, '%' + filter + '%', function (err, result) {
-      res.render('v1/etbsPermissions', { permissions: result });
+      res.render('v1/etbsPermissions', { permissions: result, sort: sort });
       conn.end();
     });
   }

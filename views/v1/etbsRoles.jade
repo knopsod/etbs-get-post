@@ -13,6 +13,7 @@ block content
   a(href='/etbs-roles/add') New
   form(method='GET' action='/etbs-roles/get')
     input#filter(type='text' placeholder='Role...' name='filter')
+    input#sort(type='checkbox' name='sort' value='1' checked=sort ? true : false)
   ul
     each role in roles
       li= 'rolename: ' + role.rolename + ', profileid: ' + role.profileid + ', is_active: ' + role.is_active

@@ -394,6 +394,7 @@ router.post('/roles/update', function(req, res, next) {
 
 router.get('/get', function(req, res, next) {
   var filter = req.query.filter;
+  var sort = req.query.sort;
   var conn = database.getConnection();
 
   if (conn) {
@@ -402,10 +403,12 @@ router.get('/get', function(req, res, next) {
     FROM users
     WHERE 1`;
 
-    sql += filter ? ' AND username LIKE ?': '';
+    sql += filter ? ' AND username LIKE ?' : '';
+
+    sql += sort ? ' ORDER BY username' : '';
 
     conn.query(sql, '%' + filter + '%', function (err, result) {
-      res.render('v1/etbsUsers', { users: result });
+      res.render('v1/etbsUsers', { users: result, sort: sort });
       conn.end();
     });
   }

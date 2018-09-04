@@ -371,6 +371,9 @@ router.post('/permissions/delete', function(req, res, next) {
 
 router.get('/get', function(req, res, next) {
   var filter = req.query.filter;
+  var sort = req.query.sort;
+
+  console.log('sort: ', sort);
 
   var conn = database.getConnection();
 
@@ -379,10 +382,12 @@ router.get('/get', function(req, res, next) {
     FROM roles
     WHERE 1`;
 
-    sql += filter ? ' AND rolename LIKE ?': '';
+    sql += filter ? ' AND rolename LIKE ?' : '';
+
+    sql += sort ? ' ORDER BY rolename' : '';
 
     conn.query(sql, '%' + filter + '%', function (err, result) {
-      res.render('v1/etbsRoles', { roles: result });
+      res.render('v1/etbsRoles', { roles: result, sort: sort });
 
       conn.end();
     });
