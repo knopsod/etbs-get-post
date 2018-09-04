@@ -243,11 +243,54 @@ router.post('/user-group/delete', function(req, res, next) {
 router.get('/roles/:username', function(req, res, next) {
   var username = req.params.username;
 
-  res.send('user roles form');
+  var conn = database.getConnection();
+
+  if (conn) {
+    var sql = 'SELECT rolename FROM users WHERE username = ? LIMIT 1 OFFSET 0';
+    var conditions = [username];
+
+    conn.query(sql, conditions, function (err, result) {
+      
+      if (result) {
+        rolename = result.length ? result[0].rolename : 'Not yet assign ROLE';
+        
+        var sql = 'SELECT rolename, profileid FROM roles';
+        
+        conn.query(sql, function (err, roleResult) {
+          res.render('v1/etbsUserRoles', 
+            {
+              username: username,
+              rolename: rolename,
+              roles: roleResult
+            }
+          );
+          conn.end();
+        });
+      }
+    });
+  }
 });
 
 router.post('/roles/update', function(req, res, next) {
-  res.send('user role update');
+  var username = req.body.username;
+  var rolename = req.body.rolename;
+
+  var conn = database.getConnection();
+
+  if (conn) {
+
+    var sql = 'UPDATE users SET ? WHERE username = ?';
+    var setditions = [
+      { rolename: rolename },
+      username
+    ];
+
+    conn.query(sql, setditions, function (err, result) {
+      res.redirect('/etbs-users/roles/' + username);
+      conn.end();
+    });
+
+  }
 });
 
 module.exports = router;
