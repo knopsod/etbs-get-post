@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = "SELECT permission, profileid, perm_type FROM permissions";
+    var sql = "SELECT permission, profileid, perm_type, is_active FROM permissions";
 
     conn.query(sql,
     function (err, result) {
@@ -27,6 +27,7 @@ router.post('/insert', function(req, res, next) {
   var permission = req.body.permission;
   var profileid = req.body.profileid;
   var perm_type = req.body.perm_type;
+  var is_active = req.body.is_active;
 
   var conn = database.getConnection();
 
@@ -36,7 +37,8 @@ router.post('/insert', function(req, res, next) {
     var perm = {
       permission: permission,
       profileid: profileid,
-      perm_type: perm_type
+      perm_type: perm_type,
+      is_active: is_active
     };
 
     conn.query(sql, perm, function (err, result) {
@@ -52,27 +54,38 @@ router.get('/edit/:permission/:profileid/:perm_type', function(req, res, next) {
   var profileid = req.params.profileid;
   var perm_type = req.params.perm_type;
 
+  var is_active = '';
+
+  var rolename = '';
+
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = 'SELECT rolename, profileid FROM roles WHERE profileid = ? LIMIT 1 OFFSET 0';
-    var conditions = [profileid];
+    var sql = 'SELECT is_active FROM permissions WHERE permission = ? AND profileid = ? AND perm_type = ?';
+    var conditions = [permission, profileid, perm_type];
 
-    conn.query(sql, conditions, function (err, result) {
-      var rolename = result.length ? result[0].rolename : 'Not yet assign ROLE';
+    conn.query(sql, conditions, function (err, fieldResult) {
+      is_active = fieldResult.length ? fieldResult[0].is_active : '';
 
-      res.render('v1/etbsPermissionsForm', {
-        action: '/etbs-permissions/update',
-        permission: permission,
-        profileid: profileid,
-        perm_type: perm_type,
-        rolename: rolename
+      var sql = 'SELECT rolename, profileid FROM roles WHERE profileid = ? LIMIT 1 OFFSET 0';
+      var conditions = [profileid];
+  
+      conn.query(sql, conditions, function (err, result) {
+        rolename = result.length ? result[0].rolename : 'Not yet assign ROLE';
+  
+        res.render('v1/etbsPermissionsForm', {
+          action: '/etbs-permissions/update',
+          permission: permission,
+          profileid: profileid,
+          perm_type: perm_type,
+          is_active: is_active,
+          rolename: rolename
+        });
+  
+        conn.end();
       });
-
-      conn.end();
     });
   }
-
 });
 
 router.post('/update', function(req, res, next) {
@@ -82,6 +95,7 @@ router.post('/update', function(req, res, next) {
   var permission = req.body.permission;
   var profileid = req.body.profileid;
   var perm_type = req.body.perm_type;
+  var is_active = req.body.is_active;
 
   var conn = database.getConnection();
 
@@ -92,7 +106,8 @@ router.post('/update', function(req, res, next) {
       {
         permission: permission,
         profileid: profileid,
-        perm_type: perm_type
+        perm_type: perm_type,
+        is_active: is_active
       },
       originPermission,
       originProfileid,
@@ -112,24 +127,36 @@ router.get('/remove/:permission/:profileid/:perm_type', function(req, res, next)
   var profileid = req.params.profileid;
   var perm_type = req.params.perm_type;
 
+  var is_active = '';
+
+  var rolename = '';
+
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = 'SELECT rolename, profileid FROM roles WHERE profileid = ? LIMIT 1 OFFSET 0';
-    var conditions = [profileid];
+    var sql = 'SELECT is_active FROM permissions WHERE permission = ? AND profileid = ? AND perm_type = ?';
+    var conditions = [permission, profileid, perm_type];
 
-    conn.query(sql, conditions, function (err, result) {
-      var rolename = result.length ? result[0].rolename : 'Not yet assign ROLE';
+    conn.query(sql, conditions, function (err, fieldResult) {
+      is_active = fieldResult.length ? fieldResult[0].is_active : '';
 
-      res.render('v1/etbsPermissionsForm', {
-        action: '/etbs-permissions/delete',
-        permission: permission,
-        profileid: profileid,
-        perm_type: perm_type,
-        rolename: rolename
+      var sql = 'SELECT rolename, profileid FROM roles WHERE profileid = ? LIMIT 1 OFFSET 0';
+      var conditions = [profileid];
+  
+      conn.query(sql, conditions, function (err, result) {
+        rolename = result.length ? result[0].rolename : 'Not yet assign ROLE';
+  
+        res.render('v1/etbsPermissionsForm', {
+          action: '/etbs-permissions/delete',
+          permission: permission,
+          profileid: profileid,
+          perm_type: perm_type,
+          is_active: is_active,
+          rolename: rolename
+        });
+  
+        conn.end();
       });
-
-      conn.end();
     });
   }
 });

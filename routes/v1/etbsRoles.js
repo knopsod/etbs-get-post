@@ -101,6 +101,7 @@ router.post('/update', function(req, res, next) {
   var originProfileid = req.body.originProfileid;
   var rolename = req.body.rolename;
   var profileid = req.body.profileid;
+  var is_active = req.body.is_active;
 
   var conn = database.getConnection();
 
@@ -110,7 +111,8 @@ router.post('/update', function(req, res, next) {
     var setditions = [
       {
         rolename: rolename,
-        profileid: profileid
+        profileid: profileid,
+        is_active: is_active
       },
       originRolename,
       originProfileid

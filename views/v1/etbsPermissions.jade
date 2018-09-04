@@ -13,7 +13,10 @@ block content
   a(href='/etbs-permissions/add') New
   ul
     each perm in permissions
-      li='permission: ' + perm.permission + ', profileid: ' + perm.profileid + ', perm_type: ' + perm.perm_type
+      li= 'permission: ' + perm.permission 
+        = ', profileid: ' + perm.profileid
+        = ', perm_type: ' + perm.perm_type
+        = ', is_active: ' + perm.is_active
         a(href='/etbs-permissions/edit/' + perm.permission + '/' + perm.profileid + '/' + perm.perm_type) Edit
         = '-'
         a(href='/etbs-permissions/remove/' + perm.permission + '/' + perm.profileid + '/' + perm.perm_type) Remove
