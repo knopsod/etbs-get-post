@@ -240,4 +240,14 @@ router.post('/user-group/delete', function(req, res, next) {
   }
 });
 
+router.get('/roles/:username', function(req, res, next) {
+  var username = req.params.username;
+
+  res.send('user roles form');
+});
+
+router.post('/roles/update', function(req, res, next) {
+  res.send('user role update');
+});
+
 module.exports = router;

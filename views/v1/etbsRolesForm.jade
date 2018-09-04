@@ -24,11 +24,11 @@ block content
     if cnt != undefined
       div.form-group
         label(for='cnt') Users:
-          a(href= '/etbs-roles/users/' + rolename + '/' + profileid)= cnt + ' user(s)'
+        a(href= '/etbs-roles/users/' + rolename + '/' + profileid)= cnt + ' user(s)'
     if permsCnt != undefined
       div.form-group
         label(for='cnt') Permissions:
-          a(href= '/etbs-roles/permissions/' + rolename + '/' + profileid)= permsCnt + ' permission(s)'
+        a(href= '/etbs-roles/permissions/' + rolename + '/' + profileid)= permsCnt + ' permission(s)'
     if action == '/etbs-roles/insert'
       button.btn.btn-primary(type='submit') Create
     else if action == '/etbs-roles/update'

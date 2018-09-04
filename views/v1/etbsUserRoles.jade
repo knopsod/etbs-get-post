@@ -1,0 +1,22 @@
+extend ../layout
+
+block content
+  ul
+    li
+      a(href='/etbs-roles') Roles
+    li
+      a(href='/etbs-permissions') Permissions
+    li
+      a(href='/etbs-users') Users
+  h1 User Roles
+  p Welcome to User Roles Page : 
+    strong= username
+    |  has 
+    strong= rolename
+  ul
+    each role in roles
+      li= 'rolename: ' + role.rolename
+        form(method='POST' action='/etbs-users/roles/update')
+          input#username(type='hidden' name='username' value=username)
+          input#rolename(type='hidden' name='rolename' value=role.rolename)
+          button.btn.btn-primary(type='submit')= 'Assign ' + role.rolename + ' to this user'
