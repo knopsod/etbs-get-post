@@ -11,6 +11,8 @@ block content
   h1 Roles
   p Welcome to Roles Page
   a(href='/etbs-roles/add') New
+  form(method='GET' action='/etbs-roles/get')
+    input#filter(type='text' placeholder='Role...' name='filter')
   ul
     each role in roles
       li= 'rolename: ' + role.rolename + ', profileid: ' + role.profileid + ', is_active: ' + role.is_active

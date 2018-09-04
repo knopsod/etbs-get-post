@@ -11,6 +11,8 @@ block content
   h1 Users
   p Welcome to Users page
   a(href='/etbs-users/add') New
+  form(method='GET' action='/etbs-users/get')
+    input#filter(type='text' placeholder='Username...' name='filter')
   ul
     each user in users
       li='username: ' + user.username

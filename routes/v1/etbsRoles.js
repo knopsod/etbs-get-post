@@ -16,7 +16,6 @@ router.get('/', function(req, res, next) {
       conn.end();
     });
   }
-
 });
 
 router.get('/add', function(req, res, next) {
@@ -122,7 +121,6 @@ router.post('/update', function(req, res, next) {
       res.redirect('/etbs-roles');
       conn.end();
     });
-
   }
 });
 
@@ -189,7 +187,6 @@ router.post('/delete', function(req, res, next) {
       res.redirect('/etbs-roles');
       conn.end();
     });
-
   }
 });
 
@@ -248,9 +245,7 @@ router.post('/users/insert', function(req, res, next) {
       res.redirect('/etbs-roles/users/' + rolename + '/' + profileid);
       conn.end();
     });
-
   }
-
 });
 
 router.post('/users/delete', function(req, res, next) {
@@ -272,7 +267,6 @@ router.post('/users/delete', function(req, res, next) {
       res.redirect('/etbs-roles/users/' + rolename + '/' + profileid);
       conn.end();
     });
-
   }
 });
 
@@ -373,7 +367,26 @@ router.post('/permissions/delete', function(req, res, next) {
       conn.end();
     });
   }
+});
 
+router.get('/get', function(req, res, next) {
+  var filter = req.query.filter;
+
+  var conn = database.getConnection();
+
+  if (conn) {
+    var sql = `SELECT rolename, profileid, is_active 
+    FROM roles
+    WHERE 1`;
+
+    sql += filter ? ' AND rolename LIKE ?': '';
+
+    conn.query(sql, '%' + filter + '%', function (err, result) {
+      res.render('v1/etbsRoles', { roles: result });
+
+      conn.end();
+    });
+  }
 });
 
 module.exports = router;

@@ -59,7 +59,6 @@ router.post('/insert', function(req, res, next) {
       res.redirect('/etbs-users');
       conn.end();
     });
-
   }
 });
 
@@ -169,7 +168,6 @@ router.post('/update', function(req, res, next) {
       res.redirect('/etbs-users');
       conn.end();
     });
-
   }
 });
 
@@ -254,7 +252,6 @@ router.post('/delete', function(req, res, next) {
       res.redirect('/etbs-users');
       conn.end();
     });
-
   }
 });
 
@@ -319,7 +316,6 @@ router.post('/user-group/insert', function(req, res, next) {
       res.redirect('/etbs-users/user-group/' + username);
       conn.end();
     });
-
   }
 });
 
@@ -341,7 +337,6 @@ router.post('/user-group/delete', function(req, res, next) {
       res.redirect('/etbs-users/user-group/' + username);
       conn.end();
     });
-
   }
 });
 
@@ -394,7 +389,25 @@ router.post('/roles/update', function(req, res, next) {
       res.redirect('/etbs-users/roles/' + username);
       conn.end();
     });
+  }
+});
 
+router.get('/get', function(req, res, next) {
+  var filter = req.query.filter;
+  var conn = database.getConnection();
+
+  if (conn) {
+    var sql = `SELECT username, clientid, rolename, extension, name, 
+      logo, company, email, mobile, fax, is_active 
+    FROM users
+    WHERE 1`;
+
+    sql += filter ? ' AND username LIKE ?': '';
+
+    conn.query(sql, '%' + filter + '%', function (err, result) {
+      res.render('v1/etbsUsers', { users: result });
+      conn.end();
+    });
   }
 });
 

@@ -45,7 +45,6 @@ router.post('/insert', function(req, res, next) {
       res.redirect('/etbs-permissions');
       conn.end();
     });
-
   }
 });
 
@@ -118,7 +117,6 @@ router.post('/update', function(req, res, next) {
       res.redirect('/etbs-permissions');
       conn.end();
     });
-
   }
 });
 
@@ -177,7 +175,6 @@ router.post('/delete', function(req, res, next) {
       res.redirect('/etbs-permissions');
       conn.end();
     });
-
   }
 });
 
@@ -239,7 +236,24 @@ router.post('/roles/update', function(req, res, next) {
       res.redirect('/etbs-permissions/roles/' + permission + '/' + roleProfileid + '/' + perm_type);
       conn.end();
     });
+  }
+});
 
+router.get('/get', function(req, res, next) {
+  var filter = req.query.filter;
+  var conn = database.getConnection();
+
+  if (conn) {
+    var sql = `SELECT permission, profileid, perm_type, is_active 
+    FROM permissions
+    WHERE 1`;
+
+    sql += filter ? ' AND permission LIKE ?': '';
+
+    conn.query(sql, '%' + filter + '%', function (err, result) {
+      res.render('v1/etbsPermissions', { permissions: result });
+      conn.end();
+    });
   }
 });
 

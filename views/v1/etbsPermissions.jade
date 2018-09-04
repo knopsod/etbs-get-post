@@ -11,6 +11,8 @@ block content
   h1 Permissions
   p Welcome to Permissions Page
   a(href='/etbs-permissions/add') New
+  form(method='GET' action='/etbs-permissions/get')
+    input#filter(type='text' placeholder='Permission...' name='filter')
   ul
     each perm in permissions
       li= 'permission: ' + perm.permission 
