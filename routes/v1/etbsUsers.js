@@ -7,9 +7,10 @@ router.get('/', function(req, res, next) {
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = `SELECT username, clientid, rolename, extension, name, 
-      logo, company, email, mobile, fax, is_active 
-    FROM users`;
+    var sql = 
+      `SELECT username, clientid, rolename, extension, name, 
+        logo, company, email, mobile, fax, is_active 
+      FROM users`;
 
     conn.query(sql,
     function (err, result) {
@@ -87,14 +88,14 @@ router.get('/edit/:username', function(req, res, next) {
     var conditions = [username];
 
     conn.query(sql, conditions, function (err, result) {
-      clientid  = result.length ? result[0].clientid : '';
+      clientid  = result.length ? result[0].clientid  : '';
       extension = result.length ? result[0].extension : '';
-      name      = result.length ? result[0].name : '';
-      logo      = result.length ? result[0].logo : '';
-      company   = result.length ? result[0].company : '';
-      email     = result.length ? result[0].email : '';
-      mobile    = result.length ? result[0].mobile : '';
-      fax       = result.length ? result[0].fax : '';
+      name      = result.length ? result[0].name      : '';
+      logo      = result.length ? result[0].logo      : '';
+      company   = result.length ? result[0].company   : '';
+      email     = result.length ? result[0].email     : '';
+      mobile    = result.length ? result[0].mobile    : '';
+      fax       = result.length ? result[0].fax       : '';
       is_active = result.length ? result[0].is_active : '';
       
       if (result.length) {
@@ -196,14 +197,14 @@ router.get('/remove/:username', function(req, res, next) {
     var conditions = [username];
 
     conn.query(sql, conditions, function (err, result) {
-      clientid  = result.length ? result[0].clientid : '';
+      clientid  = result.length ? result[0].clientid  : '';
       extension = result.length ? result[0].extension : '';
-      name      = result.length ? result[0].name : '';
-      logo      = result.length ? result[0].logo : '';
-      company   = result.length ? result[0].company : '';
-      email     = result.length ? result[0].email : '';
-      mobile    = result.length ? result[0].mobile : '';
-      fax       = result.length ? result[0].fax : '';
+      name      = result.length ? result[0].name      : '';
+      logo      = result.length ? result[0].logo      : '';
+      company   = result.length ? result[0].company   : '';
+      email     = result.length ? result[0].email     : '';
+      mobile    = result.length ? result[0].mobile    : '';
+      fax       = result.length ? result[0].fax       : '';
       is_active = result.length ? result[0].is_active : '';
       
       if (result.length) {
@@ -263,7 +264,8 @@ router.get('/user-group/:username', function(req, res, next) {
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = `SELECT username, user_group.group_id, group_name 
+    var sql = 
+      `SELECT username, user_group.group_id, group_name 
       FROM user_group 
         LEFT JOIN groups ON user_group.group_id = groups.group_id
       WHERE username = ?`;
@@ -274,12 +276,13 @@ router.get('/user-group/:username', function(req, res, next) {
       if (result) {
         groups = result.length ? result : [];
 
-        var sql = `SELECT group_id, group_name
+        var sql = 
+          `SELECT group_id, group_name
           FROM groups
           WHERE NOT EXISTS (
             SELECT 1 FROM user_group
-              WHERE user_group.group_id = groups.group_id
-                AND username = ?
+            WHERE user_group.group_id = groups.group_id
+              AND username = ?
           )`;
         var conditions = [username];
 
