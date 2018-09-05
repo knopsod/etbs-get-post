@@ -13,7 +13,7 @@ block content
     strong= username
     |  has 
     strong= rolename
-  a Back to Form
+  a(href='/etbs-users/edit/' + username) Back to Form
   ul
     each role in roles
       li= 'rolename: ' + role.rolename

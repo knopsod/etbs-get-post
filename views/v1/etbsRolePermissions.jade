@@ -12,7 +12,7 @@ block content
   p Welcome to Role Permissions Page : 
     strong= rolename
     |  has these permission
-  a Back to Form
+  a(href='/etbs-roles/edit/' + rolename + '/' + profileid) Back to Form
   p Permissions are include in this role
   ul
     each perm in permissions
