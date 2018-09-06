@@ -2,20 +2,46 @@ var express = require('express');
 var database = require('./database');
 var router = express.Router();
 
+// http://programmerblog.net/nodejs-mysql-pagination-example-beginners/
+// https://github.com/knopsod/paginationapp
+var totalRec = 0,
+  pageSize = 2,
+  pageCount = 0;
+var start = 0;
+var currentPage = 1;
+
 /* GET etbs-users listing. */
 router.get('/', function(req, res, next) {
+  currentPage = req.query.page && !isNaN(req.query.page) ? req.query.page : 1;
+
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = 
-      `SELECT username, clientid, rolename, extension, name, 
-        logo, company, email, mobile, fax, is_active 
-      FROM users`;
+    var sql = `SELECT COUNT(1) AS cnt FROM users`;
 
-    conn.query(sql,
-    function (err, result) {
-      res.render('v1/etbsUsers', { users: result });
-      conn.end();
+    conn.query(sql, function(err, resultCnt) {
+
+      totalRec = resultCnt.length ? resultCnt[0].cnt : 0;
+      pageCount = Math.ceil(totalRec / pageSize);
+
+      var sql = 
+        `SELECT username, clientid, rolename, extension, name, 
+          logo, company, email, mobile, fax, is_active 
+        FROM users
+        LIMIT ` + pageSize + ' OFFSET ' + (currentPage - 1)*pageSize;
+  
+      conn.query(sql, function (err, result) {
+        res.render('v1/etbsUsers', 
+          {
+            users: result,
+            pageSize: pageSize,
+            pageCount: pageCount,
+            currentPage: currentPage
+          }
+        );
+        
+        conn.end();
+      });
     });
   }
 });
