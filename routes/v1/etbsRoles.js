@@ -5,7 +5,7 @@ var router = express.Router();
 // http://programmerblog.net/nodejs-mysql-pagination-example-beginners/
 // https://github.com/knopsod/paginationapp
 var totalRec = 0,
-  pageSize = 2,
+  pageSize = 5,
   pageCount = 0;
 var start = 0;
 var currentPage = 1;
