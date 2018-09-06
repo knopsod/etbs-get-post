@@ -2,23 +2,46 @@ var express = require('express');
 var database = require('./database');
 var router = express.Router();
 
-const LINE = 3;
+// http://programmerblog.net/nodejs-mysql-pagination-example-beginners/
+// https://github.com/knopsod/paginationapp
+var totalRec = 0,
+  pageSize = 5,
+  pageCount = 0;
+var start = 0;
+var currentPage = 1;
+
 /* GET etbs-users listing. */
 router.get('/', function(req, res, next) {
-  var page = req.query.page;
+  currentPage = req.query.page && !isNaN(req.query.page) ? req.query.page : 1;
+
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = 'SELECT rolename, profileid, is_active FROM roles ';
-    sql += page && !isNaN(page) ? 
-      'LIMIT ' + LINE + ' OFFSET ' + (page - 1)*LINE :
-      'LIMIT ' + LINE + ' OFFSET 0';
+    var sql = `SELECT COUNT(1) AS cnt FROM roles`;
 
-    conn.query(sql,
-    function (err, result) {
-      res.render('v1/etbsRoles', { roles: result });
+    conn.query(sql, function(err, resultCnt) {
 
-      conn.end();
+      totalRec = resultCnt.length ? resultCnt[0].cnt : 0;
+      pageCount = Math.ceil(totalRec / pageSize);
+
+      var sql = 
+        `SELECT rolename, profileid, is_active 
+        FROM roles 
+        LIMIT ` + pageSize + ' OFFSET ' + (currentPage - 1)*pageSize;
+  
+      conn.query(sql, function (err, result) {
+        res.render('v1/etbsRoles', 
+          {
+            roles: result,
+            pageSize: pageSize,
+            pageCount: pageCount,
+            currentPage: currentPage
+          }
+        );
+  
+        conn.end();
+    });
+
     });
   }
 });
