@@ -270,21 +270,47 @@ router.post('/roles/update', function(req, res, next) {
 router.get('/get', function(req, res, next) {
   var filter = req.query.filter;
   var sort = req.query.sort;
-  
+
+  currentPage = req.query.page && !isNaN(req.query.page) ? req.query.page : 1;
+
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = `SELECT permission, profileid, perm_type, is_active 
-    FROM permissions
-    WHERE 1`;
+    var sql = 
+      `SELECT COUNT(1) AS cnt FROM permissions
+      WHERE 1`;
 
     sql += filter ? ' AND permission LIKE ?' : '';
 
-    sql += sort ? ' ORDER BY permission' : '';
+    conn.query(sql, '%' + filter + '%', function (err, resultCnt) {
 
-    conn.query(sql, '%' + filter + '%', function (err, result) {
-      res.render('v1/etbsPermissions', { permissions: result, sort: sort, filter: filter });
-      conn.end();
+      totalRec = resultCnt.length ? resultCnt[0].cnt : 0;
+      pageCount = Math.ceil(totalRec / pageSize);
+
+      var sql = `SELECT permission, profileid, perm_type, is_active 
+      FROM permissions
+      WHERE 1`;
+  
+      sql += filter ? ' AND permission LIKE ?' : '';
+  
+      sql += sort ? ' ORDER BY permission' : '';
+
+      sql += ' LIMIT ' + pageSize + ' OFFSET ' + (currentPage - 1)*pageSize;
+  
+      conn.query(sql, '%' + filter + '%', function (err, result) {
+        res.render('v1/etbsPermissions', 
+          { 
+            method: 'get',
+            permissions: result, 
+            sort: sort, 
+            filter: filter,
+            pageSize: pageSize,
+            pageCount: pageCount,
+            currentPage: currentPage
+          }
+        );
+        conn.end();
+      });
     });
   }
 });

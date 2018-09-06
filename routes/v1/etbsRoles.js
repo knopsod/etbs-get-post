@@ -432,6 +432,7 @@ router.get('/get', function(req, res, next) {
       conn.query(sql, '%' + filter + '%', function (err, result) {
         res.render('v1/etbsRoles', 
           {
+            method: 'get',
             roles: result, 
             sort: sort, 
             filter: filter,
