@@ -26,7 +26,7 @@ block content
        ul.pagination
         if currentPage > 1
          li
-          a(href='/etbs-roles/?page=1')  &laquo;
+          a(href='/etbs-roles/?page=1' + (filter?'&filter='+filter:'') + (sort?'&sort='+sort:''))  &laquo;
         - var x = 1
         if currentPage > 5
          - x = x + (currentPage - 4)
@@ -40,7 +40,7 @@ block content
                    = currentPage
            else
              li
-               a(href= "/etbs-roles/?page="+x )
+               a(href= "/etbs-roles/?page=" + x + (filter?'&filter='+filter:'') + (sort?'&sort='+sort:''))
                 = x
            if x == (currentPage + 4)
                li.disabled
@@ -48,6 +48,6 @@ block content
                 - break
         if currentPage != pageCount
         li
-            a(href= "/etbs-roles/?page=#{Math.floor(pageCount)}" ) &raquo;
+            a(href= "/etbs-roles/?page=#{Math.floor(pageCount)}" + (filter?'&filter='+filter:'') + (sort?'&sort='+sort:'')) &raquo;
   script(src='https://code.jquery.com/jquery-3.1.1.min.js')
   script.

@@ -270,6 +270,7 @@ router.post('/roles/update', function(req, res, next) {
 router.get('/get', function(req, res, next) {
   var filter = req.query.filter;
   var sort = req.query.sort;
+  
   var conn = database.getConnection();
 
   if (conn) {

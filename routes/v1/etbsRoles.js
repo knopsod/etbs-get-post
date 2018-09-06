@@ -401,23 +401,48 @@ router.get('/get', function(req, res, next) {
   var filter = req.query.filter;
   var sort = req.query.sort;
 
-  console.log('sort: ', sort);
+  currentPage = req.query.page && !isNaN(req.query.page) ? req.query.page : 1;
 
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = `SELECT rolename, profileid, is_active 
-    FROM roles
-    WHERE 1`;
+
+    var sql = 
+      `SELECT COUNT(1) AS cnt FROM roles
+      WHERE 1`;
 
     sql += filter ? ' AND rolename LIKE ?' : '';
 
-    sql += sort ? ' ORDER BY rolename' : '';
+    conn.query(sql, '%' + filter + '%', function (err, resultCnt) {
 
-    conn.query(sql, '%' + filter + '%', function (err, result) {
-      res.render('v1/etbsRoles', { roles: result, sort: sort, filter: filter });
+      totalRec = resultCnt.length ? resultCnt[0].cnt : 0;
+      pageCount = Math.ceil(totalRec / pageSize);
 
-      conn.end();
+      var sql = 
+        `SELECT rolename, profileid, is_active 
+        FROM roles
+        WHERE 1`;
+  
+      sql += filter ? ' AND rolename LIKE ?' : '';
+  
+      sql += sort ? ' ORDER BY rolename' : '';
+
+      sql += ' LIMIT ' + pageSize + ' OFFSET ' + (currentPage - 1)*pageSize;
+  
+      conn.query(sql, '%' + filter + '%', function (err, result) {
+        res.render('v1/etbsRoles', 
+          {
+            roles: result, 
+            sort: sort, 
+            filter: filter,
+            pageSize: pageSize,
+            pageCount: pageCount,
+            currentPage: currentPage
+          }
+        );
+  
+        conn.end();
+      });
     });
   }
 });
