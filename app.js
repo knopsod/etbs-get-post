@@ -11,6 +11,8 @@ var etbsRolesRouter = require('./routes/v1/etbsRoles');
 var etbsPermissionsRouter = require('./routes/v1/etbsPermissions');
 var etbsUsersRouter = require('./routes/v1/etbsUsers');
 
+var etbsRenderSomeJade = require('./routes/v1/etbsRenderSomeJade');
+
 var app = express();
 
 // view engine setup
@@ -29,6 +31,8 @@ app.use('/users', usersRouter);
 app.use('/etbs-roles', etbsRolesRouter);
 app.use('/etbs-permissions', etbsPermissionsRouter);
 app.use('/etbs-users', etbsUsersRouter);
+
+app.use('/render-some-jade', etbsRenderSomeJade);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -2,12 +2,17 @@ var express = require('express');
 var database = require('./database');
 var router = express.Router();
 
+const LINE = 3;
 /* GET etbs-users listing. */
 router.get('/', function(req, res, next) {
+  var page = req.query.page;
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = "SELECT rolename, profileid, is_active FROM roles";
+    var sql = 'SELECT rolename, profileid, is_active FROM roles ';
+    sql += page && !isNaN(page) ? 
+      'LIMIT ' + LINE + ' OFFSET ' + (page - 1)*LINE :
+      'LIMIT ' + LINE + ' OFFSET 0';
 
     conn.query(sql,
     function (err, result) {
