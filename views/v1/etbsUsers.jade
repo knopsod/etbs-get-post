@@ -8,12 +8,60 @@ block content
       a(href='/etbs-permissions') Permissions
     li
       a(href='/etbs-users') Users
-  h1 Users
-  p Welcome to Users page
   a(href='/etbs-users/add') New
-  form(method='GET' action='/etbs-users/get')
-    input#filter(type='text' placeholder='Username...' name='filter' value=filter)
-    input#sort(type='checkbox' name='sort' value='1' checked=sort ? true : false)
+  // Main content
+  section.content
+    .row
+      .col-xs-12
+        .box
+          .box-header
+            h3.box-title Users Management
+          // /.box-header
+          .box-body.table-responsive
+            table#example1.table.table-bordered.table-striped
+              thead
+                tr
+                  th Username
+                  th Client ID
+                  th Role name
+                  th Extension
+                  th Name
+                  th Logo
+                  th Company
+                  th Email
+                  th Mobile
+                  th Fax
+                  th Active
+              tbody
+                each user in users
+                  tr
+                    td= user.username
+                    td= user.clientid
+                    td= user.rolename
+                    td= user.extension
+                    td= user.name
+                    td= user.logo
+                    td= user.company
+                    td= user.email
+                    td= user.mobile
+                    td= user.fax
+                    td= user.is_active
+              tfoot
+                tr
+                  th Username
+                  th Client ID
+                  th Role name
+                  th Extension
+                  th Name
+                  th Logo
+                  th Company
+                  th Email
+                  th Mobile
+                  th Fax
+                  th Active
+          // /.box-body
+        // /.box
+  // /.content
   ul
     each user in users
       li='username: ' + user.username
@@ -30,118 +78,6 @@ block content
         a(href='/etbs-users/edit/' + user.username) Edit
         = '-'
         a(href='/etbs-users/remove/' + user.username) Remove
-  // http://programmerblog.net/nodejs-mysql-pagination-example-beginners/
-  // https://github.com/knopsod/paginationapp
-  if pageCount > 1
-       ul.pagination
-        if currentPage > 1
-         li
-          a(href= "/etbs-users/#{method?method:''}?page=1#{filter?'&filter='+filter:''}#{sort?'&sort='+sort:''}")  &laquo;
-        - var x = 1
-        if currentPage > 5
-         - x = x + (currentPage - 4)
-        if (x !== 1)
-           li.disabled
-              a(href='#') ...
-        - for (x; x <= pageCount; x++)
-           if( currentPage == x)
-            li.active
-               span.sr_only
-                   = currentPage
-           else
-             li
-               a(href= "/etbs-users/#{method?method:''}?page=" + x + "#{filter?'&filter='+filter:''}#{sort?'&sort='+sort:''}")
-                = x
-           if x == (currentPage + 4)
-               li.disabled
-                a(href="#") ...
-                - break
-        if currentPage != pageCount
-        li
-            a(href= "/etbs-users/#{method?method:''}?page=#{Math.floor(pageCount)}#{filter?'&filter='+filter:''}#{sort?'&sort='+sort:''}") &raquo;
-  // Main content
-  section.content
-    .row
-      .col-xs-12
-        .box
-          .box-header
-            h3.box-title Hover Data Table
-          // /.box-header
-          .box-body.table-responsive
-            table#example2.table.table-bordered.table-hover
-              thead
-                tr
-                  th Rendering engine
-                  th Browser
-                  th Platform(s)
-                  th Engine version
-                  th CSS grade
-              tbody
-                tr
-                  td Trident
-                  td
-                    | Internet
-                    | Explorer 4.0
-                  td Win 95+
-                  td  4
-                  td X
-                tr
-                  td Trident
-                  td
-                    | Internet
-                    | Explorer 5.0
-                  td Win 95+
-                  td 5
-                  td C
-              tfoot
-                tr
-                  th Rendering engine
-                  th Browser
-                  th Platform(s)
-                  th Engine version
-                  th CSS grade
-          // /.box-body
-        // /.box
-        .box
-          .box-header
-            h3.box-title Data Table With Full Features
-          // /.box-header
-          .box-body.table-responsive
-            table#example1.table.table-bordered.table-striped
-              thead
-                tr
-                  th Rendering engine
-                  th Browser
-                  th Platform(s)
-                  th Engine version
-                  th CSS grade
-              tbody
-                tr
-                  td Trident
-                  td
-                    | Internet
-                    | Explorer 4.0
-                  td Win 95+
-                  td  4
-                  td X
-                tr
-                  td Trident
-                  td
-                    | Internet
-                    | Explorer 5.0
-                  td Win 95+
-                  td 5
-                  td C
-              tfoot
-                tr
-                  th Rendering engine
-                  th Browser
-                  th Platform(s)
-                  th Engine version
-                  th CSS grade
-          // /.box-body
-        // /.box
-  // /.content
   script(src='https://code.jquery.com/jquery-3.1.1.min.js')
   script.
 block javascript
@@ -157,4 +93,4 @@ block javascript
   // AdminLTE for demo purposes
   script(src='/js/AdminLTE/demo.js', type='text/javascript')
   // page script
-  script(src='/js/AdminLTE/tables/roles.js',type='text/javascript')
+  script(src='/js/AdminLTE/tables/users.js',type='text/javascript')

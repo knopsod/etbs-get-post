@@ -8,131 +8,42 @@ block content
       a(href='/etbs-permissions') Permissions
     li
       a(href='/etbs-users') Users
-  h1 Roles
-  p Welcome to Roles Page
   a(href='/etbs-roles/add') New
-  form(method='GET' action='/etbs-roles/get')
-    input#filter(type='text' placeholder='Role...' name='filter' value=filter)
-    input#sort(type='checkbox' name='sort' value='1' checked=sort ? true : false)
-  ul
-    each role in roles
-      li= 'rolename: ' + role.rolename + ', profileid: ' + role.profileid + ', is_active: ' + role.is_active
-        a(href='/etbs-roles/edit/' + role.rolename + '/' + role.profileid) Edit
-        = '-'
-        a(href='/etbs-roles/remove/' + role.rolename + '/' + role.profileid) Remove
-  // http://programmerblog.net/nodejs-mysql-pagination-example-beginners/
-  // https://github.com/knopsod/paginationapp
-  if pageCount > 1
-       ul.pagination
-        if currentPage > 1
-         li
-          a(href= "/etbs-roles/#{method?method:''}?page=1#{filter?'&filter='+filter:''}#{sort?'&sort='+sort:''}")  &laquo;
-        - var x = 1
-        if currentPage > 5
-         - x = x + (currentPage - 4)
-        if (x !== 1)
-           li.disabled
-              a(href='#') ...
-        - for (x; x <= pageCount; x++)
-           if( currentPage == x)
-            li.active
-               span.sr_only
-                   = currentPage
-           else
-             li
-               a(href= "/etbs-roles/#{method?method:''}?page=" + x + "#{filter?'&filter='+filter:''}#{sort?'&sort='+sort:''}")
-                = x
-           if x == (currentPage + 4)
-               li.disabled
-                a(href="#") ...
-                - break
-        if currentPage != pageCount
-        li
-            a(href= "/etbs-roles/#{method?method:''}?page=#{Math.floor(pageCount)}#{filter?'&filter='+filter:''}#{sort?'&sort='+sort:''}") &raquo;
-  
   // Main content
   section.content
     .row
       .col-xs-12
         .box
           .box-header
-            h3.box-title Hover Data Table
-          // /.box-header
-          .box-body.table-responsive
-            table#example2.table.table-bordered.table-hover
-              thead
-                tr
-                  th Rendering engine
-                  th Browser
-                  th Platform(s)
-                  th Engine version
-                  th CSS grade
-              tbody
-                tr
-                  td Trident
-                  td
-                    | Internet
-                    | Explorer 4.0
-                  td Win 95+
-                  td  4
-                  td X
-                tr
-                  td Trident
-                  td
-                    | Internet
-                    | Explorer 5.0
-                  td Win 95+
-                  td 5
-                  td C
-              tfoot
-                tr
-                  th Rendering engine
-                  th Browser
-                  th Platform(s)
-                  th Engine version
-                  th CSS grade
-          // /.box-body
-        // /.box
-        .box
-          .box-header
-            h3.box-title Data Table With Full Features
+            h3.box-title Roles Management
           // /.box-header
           .box-body.table-responsive
             table#example1.table.table-bordered.table-striped
               thead
                 tr
-                  th Rendering engine
-                  th Browser
-                  th Platform(s)
-                  th Engine version
-                  th CSS grade
+                  th Role name
+                  th Profile ID
+                  th Active
               tbody
-                tr
-                  td Trident
-                  td
-                    | Internet
-                    | Explorer 4.0
-                  td Win 95+
-                  td  4
-                  td X
-                tr
-                  td Trident
-                  td
-                    | Internet
-                    | Explorer 5.0
-                  td Win 95+
-                  td 5
-                  td C
+                each role in roles
+                  tr
+                    td= role.rolename
+                    td= role.profileid
+                    td= role.is_active
               tfoot
                 tr
-                  th Rendering engine
-                  th Browser
-                  th Platform(s)
-                  th Engine version
-                  th CSS grade
+                  th Role name
+                  th Profile ID
+                  th Active
           // /.box-body
         // /.box
   // /.content
+  ul
+    each role in roles
+      li= 'rolename: ' + role.rolename + ', profileid: ' + role.profileid + ', is_active: ' + role.is_active
+        a(href='/etbs-roles/edit/' + role.rolename + '/' + role.profileid) Edit
+        = '-'
+        a(href='/etbs-roles/remove/' + role.rolename + '/' + role.profileid) Remove
   script(src='https://code.jquery.com/jquery-3.1.1.min.js')
   script.
 block javascript

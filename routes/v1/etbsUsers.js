@@ -2,14 +2,6 @@ var express = require('express');
 var database = require('./database');
 var router = express.Router();
 
-// http://programmerblog.net/nodejs-mysql-pagination-example-beginners/
-// https://github.com/knopsod/paginationapp
-var totalRec = 0,
-  pageSize = 5,
-  pageCount = 0;
-var start = 0;
-var currentPage = 1;
-
 /* GET etbs-users listing. */
 router.get('/', function(req, res, next) {
   currentPage = req.query.page && !isNaN(req.query.page) ? req.query.page : 1;
@@ -17,31 +9,19 @@ router.get('/', function(req, res, next) {
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = `SELECT COUNT(1) AS cnt FROM users`;
+    var sql = 
+      `SELECT username, clientid, rolename, extension, name, 
+        logo, company, email, mobile, fax, is_active 
+      FROM users`;
 
-    conn.query(sql, function(err, resultCnt) {
-
-      totalRec = resultCnt.length ? resultCnt[0].cnt : 0;
-      pageCount = Math.ceil(totalRec / pageSize);
-
-      var sql = 
-        `SELECT username, clientid, rolename, extension, name, 
-          logo, company, email, mobile, fax, is_active 
-        FROM users
-        LIMIT ` + pageSize + ' OFFSET ' + (currentPage - 1)*pageSize;
-  
-      conn.query(sql, function (err, result) {
-        res.render('v1/etbsUsers', 
-          {
-            users: result,
-            pageSize: pageSize,
-            pageCount: pageCount,
-            currentPage: currentPage
-          }
-        );
-        
-        conn.end();
-      });
+    conn.query(sql, function (err, result) {
+      res.render('v1/etbsUsers', 
+        {
+          users: result
+        }
+      );
+      
+      conn.end();
     });
   }
 });
@@ -417,56 +397,6 @@ router.post('/roles/update', function(req, res, next) {
     conn.query(sql, setditions, function (err, result) {
       res.redirect('/etbs-users/roles/' + username);
       conn.end();
-    });
-  }
-});
-
-router.get('/get', function(req, res, next) {
-  var filter = req.query.filter;
-  var sort = req.query.sort;
-
-  currentPage = req.query.page && !isNaN(req.query.page) ? req.query.page : 1;
-
-  var conn = database.getConnection();
-
-  if (conn) {
-    var sql = 
-      `SELECT COUNT(1) AS cnt FROM users
-      WHERE 1`;
-
-    sql += filter ? ' AND username LIKE ?' : '';
-
-    conn.query(sql, '%' + filter + '%', function (err, resultCnt) {
-
-      totalRec = resultCnt.length ? resultCnt[0].cnt : 0;
-      pageCount = Math.ceil(totalRec / pageSize);
-
-      var sql = 
-        `SELECT username, clientid, rolename, extension, name, 
-          logo, company, email, mobile, fax, is_active 
-        FROM users
-        WHERE 1`;
-  
-      sql += filter ? ' AND username LIKE ?' : '';
-  
-      sql += sort ? ' ORDER BY username' : '';
-
-      sql += ' LIMIT ' + pageSize + ' OFFSET ' + (currentPage - 1)*pageSize;
-  
-      conn.query(sql, '%' + filter + '%', function (err, result) {
-        res.render('v1/etbsUsers', 
-          {
-            method: 'get',
-            users: result, 
-            sort: sort, 
-            filter: filter,
-            pageSize: pageSize,
-            pageCount: pageCount,
-            currentPage: currentPage
-          }
-        );
-        conn.end();
-      });
     });
   }
 });

@@ -2,45 +2,24 @@ var express = require('express');
 var database = require('./database');
 var router = express.Router();
 
-// http://programmerblog.net/nodejs-mysql-pagination-example-beginners/
-// https://github.com/knopsod/paginationapp
-var totalRec = 0,
-  pageSize = 5,
-  pageCount = 0;
-var start = 0;
-var currentPage = 1;
-
 /* GET etbs-users listing. */
 router.get('/', function(req, res, next) {
-  currentPage = req.query.page && !isNaN(req.query.page) ? req.query.page : 1;
 
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = `SELECT COUNT(1) AS cnt FROM permissions`;
+    var sql = 
+      `SELECT permission, profileid, perm_type, is_active 
+      FROM permissions`;
 
-    conn.query(sql, function (err, resultCnt) {
-
-      totalRec = resultCnt.length ? resultCnt[0].cnt : 0;
-      pageCount = Math.ceil(totalRec / pageSize);
+    conn.query(sql, function (err, result) {
+      res.render('v1/etbsPermissions', 
+        {
+          permissions: result
+        }
+      );
       
-      var sql = 
-        `SELECT permission, profileid, perm_type, is_active 
-        FROM permissions
-        LIMIT ` + pageSize + ' OFFSET ' + (currentPage - 1)*pageSize;
-  
-      conn.query(sql, function (err, result) {
-        res.render('v1/etbsPermissions', 
-          {
-            permissions: result,
-            pageSize: pageSize,
-            pageCount: pageCount,
-            currentPage: currentPage
-          }
-        );
-        
-        conn.end();
-      });
+      conn.end();
     });
   }
 });
@@ -263,54 +242,6 @@ router.post('/roles/update', function(req, res, next) {
     conn.query(sql, setditions, function (err, result) {
       res.redirect('/etbs-permissions/roles/' + permission + '/' + roleProfileid + '/' + perm_type);
       conn.end();
-    });
-  }
-});
-
-router.get('/get', function(req, res, next) {
-  var filter = req.query.filter;
-  var sort = req.query.sort;
-
-  currentPage = req.query.page && !isNaN(req.query.page) ? req.query.page : 1;
-
-  var conn = database.getConnection();
-
-  if (conn) {
-    var sql = 
-      `SELECT COUNT(1) AS cnt FROM permissions
-      WHERE 1`;
-
-    sql += filter ? ' AND permission LIKE ?' : '';
-
-    conn.query(sql, '%' + filter + '%', function (err, resultCnt) {
-
-      totalRec = resultCnt.length ? resultCnt[0].cnt : 0;
-      pageCount = Math.ceil(totalRec / pageSize);
-
-      var sql = `SELECT permission, profileid, perm_type, is_active 
-      FROM permissions
-      WHERE 1`;
-  
-      sql += filter ? ' AND permission LIKE ?' : '';
-  
-      sql += sort ? ' ORDER BY permission' : '';
-
-      sql += ' LIMIT ' + pageSize + ' OFFSET ' + (currentPage - 1)*pageSize;
-  
-      conn.query(sql, '%' + filter + '%', function (err, result) {
-        res.render('v1/etbsPermissions', 
-          { 
-            method: 'get',
-            permissions: result, 
-            sort: sort, 
-            filter: filter,
-            pageSize: pageSize,
-            pageCount: pageCount,
-            currentPage: currentPage
-          }
-        );
-        conn.end();
-      });
     });
   }
 });

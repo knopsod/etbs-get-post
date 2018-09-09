@@ -8,12 +8,39 @@ block content
       a(href='/etbs-permissions') Permissions
     li
       a(href='/etbs-users') Users
-  h1 Permissions
-  p Welcome to Permissions Page
   a(href='/etbs-permissions/add') New
-  form(method='GET' action='/etbs-permissions/get')
-    input#filter(type='text' placeholder='Permission...' name='filter' value=filter)
-    input#sort(type='checkbox' name='sort' value='1' checked=sort ? true : false)
+  // Main content
+  section.content
+    .row
+      .col-xs-12
+        .box
+          .box-header
+            h3.box-title Permissions Management
+          // /.box-header
+          .box-body.table-responsive
+            table#example1.table.table-bordered.table-striped
+              thead
+                tr
+                  th Permission
+                  th Profile ID
+                  th Permission Type
+                  th Active
+              tbody
+                each perm in permissions
+                  tr
+                    td= perm.permission
+                    td= perm.profileid
+                    td= perm.perm_type
+                    td= perm.is_active
+              tfoot
+                tr
+                  th Permission
+                  th Profile ID
+                  th Permission Type
+                  th Active
+          // /.box-body
+        // /.box
+  // /.content
   ul
     each perm in permissions
       li= 'permission: ' + perm.permission 
@@ -23,118 +50,6 @@ block content
         a(href='/etbs-permissions/edit/' + perm.permission + '/' + perm.profileid + '/' + perm.perm_type) Edit
         = '-'
         a(href='/etbs-permissions/remove/' + perm.permission + '/' + perm.profileid + '/' + perm.perm_type) Remove
-  // http://programmerblog.net/nodejs-mysql-pagination-example-beginners/
-  // https://github.com/knopsod/paginationapp
-  if pageCount > 1
-       ul.pagination
-        if currentPage > 1
-         li
-          a(href="/etbs-permissions/#{method?method:''}?page=1#{filter?'&filter='+filter:''}#{sort?'&sort='+sort:''}")  &laquo;
-        - var x = 1
-        if currentPage > 5
-         - x = x + (currentPage - 4)
-        if (x !== 1)
-           li.disabled
-              a(href='#') ...
-        - for (x; x <= pageCount; x++)
-           if( currentPage == x)
-            li.active
-               span.sr_only
-                   = currentPage
-           else
-             li
-               a(href= "/etbs-permissions/#{method?method:''}?page=" + x + "#{filter?'&filter='+filter:''}#{sort?'&sort='+sort:''}")
-                = x
-           if x == (currentPage + 4)
-               li.disabled
-                a(href="#") ...
-                - break
-        if currentPage != pageCount
-        li
-            a(href= "/etbs-permissions/#{method?method:''}?page=#{Math.floor(pageCount)}#{filter?'&filter='+filter:''}#{sort?'&sort='+sort:''}") &raquo;
-  // Main content
-  section.content
-    .row
-      .col-xs-12
-        .box
-          .box-header
-            h3.box-title Hover Data Table
-          // /.box-header
-          .box-body.table-responsive
-            table#example2.table.table-bordered.table-hover
-              thead
-                tr
-                  th Rendering engine
-                  th Browser
-                  th Platform(s)
-                  th Engine version
-                  th CSS grade
-              tbody
-                tr
-                  td Trident
-                  td
-                    | Internet
-                    | Explorer 4.0
-                  td Win 95+
-                  td  4
-                  td X
-                tr
-                  td Trident
-                  td
-                    | Internet
-                    | Explorer 5.0
-                  td Win 95+
-                  td 5
-                  td C
-              tfoot
-                tr
-                  th Rendering engine
-                  th Browser
-                  th Platform(s)
-                  th Engine version
-                  th CSS grade
-          // /.box-body
-        // /.box
-        .box
-          .box-header
-            h3.box-title Data Table With Full Features
-          // /.box-header
-          .box-body.table-responsive
-            table#example1.table.table-bordered.table-striped
-              thead
-                tr
-                  th Rendering engine
-                  th Browser
-                  th Platform(s)
-                  th Engine version
-                  th CSS grade
-              tbody
-                tr
-                  td Trident
-                  td
-                    | Internet
-                    | Explorer 4.0
-                  td Win 95+
-                  td  4
-                  td X
-                tr
-                  td Trident
-                  td
-                    | Internet
-                    | Explorer 5.0
-                  td Win 95+
-                  td 5
-                  td C
-              tfoot
-                tr
-                  th Rendering engine
-                  th Browser
-                  th Platform(s)
-                  th Engine version
-                  th CSS grade
-          // /.box-body
-        // /.box
-  // /.content
   script(src='https://code.jquery.com/jquery-3.1.1.min.js')
   script.
 block javascript
@@ -150,4 +65,4 @@ block javascript
   // AdminLTE for demo purposes
   script(src='/js/AdminLTE/demo.js', type='text/javascript')
   // page script
-  script(src='/js/AdminLTE/tables/roles.js',type='text/javascript')
+  script(src='/js/AdminLTE/tables/permissions.js',type='text/javascript')

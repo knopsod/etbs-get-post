@@ -2,46 +2,24 @@ var express = require('express');
 var database = require('./database');
 var router = express.Router();
 
-// http://programmerblog.net/nodejs-mysql-pagination-example-beginners/
-// https://github.com/knopsod/paginationapp
-var totalRec = 0,
-  pageSize = 5,
-  pageCount = 0;
-var start = 0;
-var currentPage = 1;
-
 /* GET etbs-users listing. */
 router.get('/', function(req, res, next) {
-  currentPage = req.query.page && !isNaN(req.query.page) ? req.query.page : 1;
 
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = `SELECT COUNT(1) AS cnt FROM roles`;
+    var sql = 
+      `SELECT rolename, profileid, is_active 
+      FROM roles`;
 
-    conn.query(sql, function(err, resultCnt) {
+    conn.query(sql, function (err, result) {
+      res.render('v1/etbsRoles', 
+        {
+          roles: result
+        }
+      );
 
-      totalRec = resultCnt.length ? resultCnt[0].cnt : 0;
-      pageCount = Math.ceil(totalRec / pageSize);
-
-      var sql = 
-        `SELECT rolename, profileid, is_active 
-        FROM roles 
-        LIMIT ` + pageSize + ' OFFSET ' + (currentPage - 1)*pageSize;
-  
-      conn.query(sql, function (err, result) {
-        res.render('v1/etbsRoles', 
-          {
-            roles: result,
-            pageSize: pageSize,
-            pageCount: pageCount,
-            currentPage: currentPage
-          }
-        );
-  
-        conn.end();
-    });
-
+      conn.end();
     });
   }
 });
@@ -393,57 +371,6 @@ router.post('/permissions/delete', function(req, res, next) {
     conn.query(sql, setditions, function (err, result) {
       res.redirect('/etbs-roles/permissions/' + rolename + '/' + profileid);
       conn.end();
-    });
-  }
-});
-
-router.get('/get', function(req, res, next) {
-  var filter = req.query.filter;
-  var sort = req.query.sort;
-
-  currentPage = req.query.page && !isNaN(req.query.page) ? req.query.page : 1;
-
-  var conn = database.getConnection();
-
-  if (conn) {
-
-    var sql = 
-      `SELECT COUNT(1) AS cnt FROM roles
-      WHERE 1`;
-
-    sql += filter ? ' AND rolename LIKE ?' : '';
-
-    conn.query(sql, '%' + filter + '%', function (err, resultCnt) {
-
-      totalRec = resultCnt.length ? resultCnt[0].cnt : 0;
-      pageCount = Math.ceil(totalRec / pageSize);
-
-      var sql = 
-        `SELECT rolename, profileid, is_active 
-        FROM roles
-        WHERE 1`;
-  
-      sql += filter ? ' AND rolename LIKE ?' : '';
-  
-      sql += sort ? ' ORDER BY rolename' : '';
-
-      sql += ' LIMIT ' + pageSize + ' OFFSET ' + (currentPage - 1)*pageSize;
-  
-      conn.query(sql, '%' + filter + '%', function (err, result) {
-        res.render('v1/etbsRoles', 
-          {
-            method: 'get',
-            roles: result, 
-            sort: sort, 
-            filter: filter,
-            pageSize: pageSize,
-            pageCount: pageCount,
-            currentPage: currentPage
-          }
-        );
-  
-        conn.end();
-      });
     });
   }
 });
