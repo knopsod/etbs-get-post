@@ -21,6 +21,8 @@ router.get('/', function(req, res, next) {
       
       conn.end();
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -52,6 +54,8 @@ router.post('/insert', function(req, res, next) {
       res.redirect('/etbs-permissions');
       conn.end();
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -91,6 +95,8 @@ router.get('/edit/:permission/:profileid/:perm_type', function(req, res, next) {
         conn.end();
       });
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -124,6 +130,8 @@ router.post('/update', function(req, res, next) {
       res.redirect('/etbs-permissions');
       conn.end();
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -163,6 +171,8 @@ router.get('/remove/:permission/:profileid/:perm_type', function(req, res, next)
         conn.end();
       });
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -182,6 +192,8 @@ router.post('/delete', function(req, res, next) {
       res.redirect('/etbs-permissions');
       conn.end();
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -218,6 +230,8 @@ router.get('/roles/:permission/:profileid/:perm_type', function(req, res, next) 
         });
       }
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -243,6 +257,8 @@ router.post('/roles/update', function(req, res, next) {
       res.redirect('/etbs-permissions/roles/' + permission + '/' + roleProfileid + '/' + perm_type);
       conn.end();
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 

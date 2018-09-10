@@ -21,6 +21,8 @@ router.get('/', function(req, res, next) {
 
       conn.end();
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -50,6 +52,8 @@ router.post('/insert', function(req, res, next) {
       res.redirect('/etbs-roles');
       conn.end();
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -98,6 +102,8 @@ router.get('/edit/:rolename/:profileid', function(req, res, next) {
         }
       });
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -127,6 +133,8 @@ router.post('/update', function(req, res, next) {
       res.redirect('/etbs-roles');
       conn.end();
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -175,6 +183,8 @@ router.get('/remove/:rolename/:profileid', function(req, res, next) {
         }
       });
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -193,6 +203,8 @@ router.post('/delete', function(req, res, next) {
       res.redirect('/etbs-roles');
       conn.end();
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -229,6 +241,8 @@ router.get('/users/:rolename/:profileid', function(req, res, next) {
         });
       }
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -251,6 +265,8 @@ router.post('/users/insert', function(req, res, next) {
       res.redirect('/etbs-roles/users/' + rolename + '/' + profileid);
       conn.end();
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -273,6 +289,8 @@ router.post('/users/delete', function(req, res, next) {
       res.redirect('/etbs-roles/users/' + rolename + '/' + profileid);
       conn.end();
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -317,6 +335,8 @@ router.get('/permissions/:rolename/:profileid', function(req, res, next) {
         });
       }
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -346,6 +366,8 @@ router.post('/permissions/insert', function(req, res, next) {
       res.redirect('/etbs-roles/permissions/' + rolename + '/' + originProfileid);
       conn.end();
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
@@ -375,6 +397,8 @@ router.post('/permissions/delete', function(req, res, next) {
       res.redirect('/etbs-roles/permissions/' + rolename + '/' + profileid);
       conn.end();
     });
+  } else {
+    res.status(500).send('Can not connect to database');
   }
 });
 
