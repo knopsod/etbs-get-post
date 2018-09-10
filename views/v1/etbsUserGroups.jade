@@ -1,4 +1,4 @@
-extend ../layout3
+extend ../layout2
 block content
   // Content Header (Page header)
   section.content-header
@@ -51,4 +51,4 @@ block content
                     form(method='POST' action='/etbs-users/user-group/insert')
                       input#preUsername(type='hidden' name='preUsername' value=username)
                       input#unGroupId(type='hidden' name='unGroupId' value=unGroup.group_id)
-                      button.btn.btn-primary(type='submit') Add
+                      button.btn.btn-primary(type='submit') Apply
