@@ -1,60 +1,74 @@
 extend ../layout3
-
 block content
-  ul
-    li
-      a(href='/etbs-roles') Roles
-    li
-      a(href='/etbs-permissions') Permissions
-    li
-      a(href='/etbs-users') Users
-  h1 Users Page
-  p Welcome to Users Form page
-  form(method='POST' action=action)
-    if username != undefined
-      input#originUsername(type='hidden' name='originUsername' value=username)
-    div.form-group
-      label(for='username') Username:
-      input#username.form-control(type='text', placeholder='Username' name='username' value=username)
-    div.form-group
-      label(for='clientid') Client ID:
-      input#clientid.form-control(type='text', placeholder='Client ID' name='clientid' value=clientid)
-    div.form-group
-      label(for='extension') Extension:
-      input#extension.form-control(type='text', placeholder='Extension' name='extension' value=extension)
-    div.form-group
-      label(for='name') Name:
-      input#name.form-control(type='text', placeholder='Name' name='name' value=name)
-    div.form-group
-      label(for='logo') Logo:
-      input#logo.form-control(type='text', placeholder='Logo' name='logo' value=logo)
-    div.form-group
-      label(for='company') Company:
-      input#company.form-control(type='text', placeholder='Company' name='company' value=company)
-    div.form-group
-      label(for='email') Email:
-      input#email.form-control(type='text', placeholder='Email' name='email' value=email)
-    div.form-group
-      label(for='mobile') Mobile:
-      input#mobile.form-control(type='text', placeholder='Mobile' name='mobile' value=mobile)
-    div.form-group
-      label(for='fax') Fax:
-      input#fax.form-control(type='text', placeholder='Fax' name='fax' value=fax)
-    div.form-group
-      label(for='is_active') Active:
-      input#is_active.form-control(type='text', placeholder='Active' name='is_active' value=is_active)
-    if rolename != undefined
-      div.form-group
-        label(for='roles') Role:
-        a(href= '/etbs-users/roles/' + username)= rolename ? rolename : 'Not yet assign role'
-    if cnt != undefined
-      div.form-group
-        label(for='cnt') Groups:
-        a(href= '/etbs-users/user-group/' + username)= cnt + ' group(s)'
-    if action == '/etbs-users/insert'
-      button.btn.btn-primary(type='submit') Create
-    else if action == '/etbs-users/update'
-      button.btn.btn-primary(type='submit') Save
-    else
-      button.btn.btn-primary(type='submit') Remove
-  
+  // Content Header (Page header)
+  section.content-header
+    h1
+      | Users
+  // Main content
+  section.content
+    .row
+      // left column
+      .col-md-12
+        // general form elements
+        .box.box-primary
+          .box-header
+            if action == '/etbs-users/insert'
+              h3.box-title New
+            else if action == '/etbs-users/update'
+              h3.box-title Edit
+            else
+              h3.box-title Remove
+          // /.box-header
+          // form start
+          form(method='POST' action=action)
+            .box-body
+              if username != undefined
+                input#originUsername(type='hidden' name='originUsername' value=username)
+              .form-group
+                label(for='username') Username
+                input#username.form-control(type='text', placeholder='Username' name='username' value=username)
+              .form-group
+                label(for='clientid') Client ID
+                input#clientid.form-control(type='text', placeholder='Client ID' name='clientid' value=clientid)
+              .form-group
+                label(for='extension') Extension
+                input#extension.form-control(type='text', placeholder='Extension' name='extension' value=extension)
+              .form-group
+                label(for='name') Name
+                input#name.form-control(type='text', placeholder='Name' name='name' value=name)
+              .form-group
+                label(for='logo') Logo
+                input#logo.form-control(type='text', placeholder='Logo' name='logo' value=logo)
+              .form-group
+                label(for='company') Company
+                input#company.form-control(type='text', placeholder='Company' name='company' value=company)
+              .form-group
+                label(for='email') Email
+                input#email.form-control(type='text', placeholder='Email' name='email' value=email)
+              .form-group
+                label(for='mobile') Mobile
+                input#mobile.form-control(type='text', placeholder='Mobile' name='mobile' value=mobile)
+              .form-group
+                label(for='fax') Fax
+                input#fax.form-control(type='text', placeholder='Fax' name='fax' value=fax)
+              .form-group
+                label(for='is_active') Active
+                input#is_active.form-control(type='text', placeholder='Active' name='is_active' value=is_active)
+              if rolename != undefined
+                .form-group
+                  label(for='roles') Role
+                  p
+                    a(href= '/etbs-users/roles/' + username)= rolename ? rolename : 'Not yet assign role'
+              if cnt != undefined
+                .form-group
+                  label(for='cnt') Groups
+                  p
+                    a(href= '/etbs-users/user-group/' + username)= cnt + ' group(s)'
+              // /.box-body
+              .box-footer
+              if action == '/etbs-users/insert'
+                button.btn.btn-primary(type='submit') Create
+              else if action == '/etbs-users/update'
+                button.btn.btn-primary(type='submit') Save
+              else
+                button.btn.btn-danger(type='submit') Remove

@@ -1,30 +1,54 @@
 extend ../layout3
-
 block content
-  ul
-    li
-      a(href='/etbs-roles') Roles
-    li
-      a(href='/etbs-permissions') Permissions
-    li
-      a(href='/etbs-users') Users
-  h1 User Groups Page
-  p Welcome to User Groups Page : 
-    strong= username
-  a(href='/etbs-users/edit/' + username) Back to Form
-  ul
-    each group in groups
-      li= 'Username: ' + group.username + ', Group: ' + group.group_name
-        form(method='POST' action='/etbs-users/user-group/delete')
-          input#username(type='hidden' name='username' value=group.username)
-          input#groupId(type='hidden' name='groupId' value=group.group_id)
-          button.btn.btn-primary(type='submit') Remove
-  hr
-  p Group list
-  ul
-    each unGroup in unGroups
-      li= 'Id: ' + unGroup.group_id + ', Name: ' + unGroup.group_name
-        form(method='POST' action='/etbs-users/user-group/insert')
-          input#preUsername(type='hidden' name='preUsername' value=username)
-          input#unGroupId(type='hidden' name='unGroupId' value=unGroup.group_id)
-          button.btn.btn-primary(type='submit') Add
+  // Content Header (Page header)
+  section.content-header
+    h1
+      | Groups
+  // Main content
+  section.content
+    .row
+      // left column
+      .col-md-12
+        // general form elements
+        .box.box-primary
+          .box-header
+            h3.box-title Groups of username #{username} relate in
+          .box-body.pad.table-responsive
+            p
+              a(href='/etbs-users/edit/' + username) Back to Form
+            table.table.table-bordered.text-center
+              tr
+                th Username
+                th Group name
+                th
+              each group in groups
+                tr
+                  td= group.username
+                  td= group.group_name
+                  td
+                    form(method='POST' action='/etbs-users/user-group/delete')
+                      input#username(type='hidden' name='username' value=group.username)
+                      input#groupId(type='hidden' name='groupId' value=group.group_id)
+                      button.btn.btn-danger(type='submit') Remove
+    .row
+      // left column
+      .col-md-12
+        // general form elements
+        .box.box-primary
+          .box-header
+            h3.box-title Other user
+          .box-body.pad.table-responsive
+            table.table.table-bordered.text-center
+              tr
+                th Group ID
+                th Group name
+                th
+              each unGroup in unGroups
+                tr
+                  td= unGroup.group_id
+                  td= unGroup.group_name
+                  td
+                    form(method='POST' action='/etbs-users/user-group/insert')
+                      input#preUsername(type='hidden' name='preUsername' value=username)
+                      input#unGroupId(type='hidden' name='unGroupId' value=unGroup.group_id)
+                      button.btn.btn-primary(type='submit') Add

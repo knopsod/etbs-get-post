@@ -1,23 +1,34 @@
 extend ../layout3
-
 block content
-  ul
-    li
-      a(href='/etbs-roles') Roles
-    li
-      a(href='/etbs-permissions') Permissions
-    li
-      a(href='/etbs-users') Users
-  h1 User Roles
-  p Welcome to User Roles Page : 
-    strong= username
-    |  has 
-    strong= rolename
-  a(href='/etbs-users/edit/' + username) Back to Form
-  ul
-    each role in roles
-      li= 'rolename: ' + role.rolename
-        form(method='POST' action='/etbs-users/roles/update')
-          input#username(type='hidden' name='username' value=username)
-          input#rolename(type='hidden' name='rolename' value=role.rolename)
-          button.btn.btn-primary(type='submit')= 'Assign ' + role.rolename + ' to this user'
+  // Content Header (Page header)
+  section.content-header
+    h1
+      | Roles
+  // Main content
+  section.content
+    .row
+      // left column
+      .col-md-12
+        // general form elements
+        .box.box-primary
+          .box-header
+            h3.box-title Role of this user
+          .box-body.pad.table-responsive
+            p
+              a(href='/etbs-users/edit/' + username) Back to Form
+            p Role of user 
+              strong= username
+              |  is 
+              strong= rolename
+            table.table.table-bordered.text-center
+              tr
+                th Role name
+                th(width=120)
+              each role in roles
+                tr
+                  td= role.rolename
+                  td
+                    form(method='POST' action='/etbs-users/roles/update')
+                      input#username(type='hidden' name='username' value=username)
+                      input#rolename(type='hidden' name='rolename' value=role.rolename)
+                      button.btn.btn-primary(type='submit')= 'Apply'

@@ -13,6 +13,8 @@ block content
             // h3.box-title Users Management
           // /.box-header
           .box-body.table-responsive
+            p
+              a(href='/etbs-users/add') New
             table#example1.table.table-bordered.table-striped
               thead
                 tr
@@ -27,6 +29,7 @@ block content
                   th Mobile
                   th Fax
                   th Active
+                  th(width=100)
               tbody
                 each user in users
                   tr
@@ -41,6 +44,10 @@ block content
                     td= user.mobile
                     td= user.fax
                     td= user.is_active
+                    td(style='text-align: center')
+                      a(href='/etbs-users/edit/' + user.username) Edit
+                      | -
+                      a(href='/etbs-users/remove/' + user.username) Remove
               tfoot
                 tr
                   th Username
@@ -54,25 +61,10 @@ block content
                   th Mobile
                   th Fax
                   th Active
+                  th
           // /.box-body
         // /.box
   // /.content
-  ul
-    each user in users
-      li='username: ' + user.username
-        =', clientid: ' + user.clientid
-        =', rolename: ' + user.rolename
-        =', extension: ' + user.extension
-        =', name: ' + user.name
-        =', logo: ' + user.logo
-        =', company: ' + user.company
-        =', email: ' + user.email
-        =', mobile: ' + user.mobile
-        =', fax: ' + user.fax
-        =', is_active: ' + user.is_active
-        a(href='/etbs-users/edit/' + user.username) Edit
-        = '-'
-        a(href='/etbs-users/remove/' + user.username) Remove
   script(src='https://code.jquery.com/jquery-3.1.1.min.js')
   script.
 block javascript
