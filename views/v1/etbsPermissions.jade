@@ -1,21 +1,16 @@
 extend ../layout3
-
 block content
-  ul
-    li
-      a(href='/etbs-roles') Roles
-    li
-      a(href='/etbs-permissions') Permissions
-    li
-      a(href='/etbs-users') Users
-  a(href='/etbs-permissions/add') New
+  // Content Header (Page header)
+  section.content-header
+    h1
+      | Permissions Management
   // Main content
   section.content
     .row
       .col-xs-12
         .box
           .box-header
-            h3.box-title Permissions Management
+            // h3.box-title Permissions Management
           // /.box-header
           .box-body.table-responsive
             table#example1.table.table-bordered.table-striped

@@ -285,7 +285,11 @@ router.get('/permissions/:rolename/:profileid', function(req, res, next) {
   var conn = database.getConnection();
 
   if (conn) {
-    var sql = 'SELECT permission, profileid, perm_type FROM permissions WHERE profileid = ?';
+    var sql = 
+      `SELECT permission, p.profileid, perm_type, r.rolename 
+      FROM permissions p
+        LEFT JOIN roles r ON p.profileid = r.profileid
+      WHERE p.profileid = ?`;
     var conditions = [profileid];
 
     conn.query(sql, conditions, function (err, result) {
@@ -293,7 +297,11 @@ router.get('/permissions/:rolename/:profileid', function(req, res, next) {
       if (result) {
         permissions = result.length ? result : [];
         
-        var sql = 'SELECT permission, profileid, perm_type FROM permissions WHERE profileid != ?';
+        var sql = 
+          `SELECT permission, p.profileid, perm_type, r.rolename 
+          FROM permissions p
+            LEFT JOIN roles r ON p.profileid = r.profileid
+          WHERE p.profileid != ?`;
         var conditions = [profileid];
         
         conn.query(sql, conditions, function (err, unPermissionsResult) {
@@ -333,11 +341,6 @@ router.post('/permissions/insert', function(req, res, next) {
       profileid,
       perm_type
     ];
-
-    console.log(
-      `UPDATE permissions SET profileid = '` + profileid + `' 
-      WHERE permission = '` + permission + `' AND profileid = '` + originProfileid + `' AND perm_type = '` + perm_type + `'`
-    );
 
     conn.query(sql, setditions, function (err, result) {
       res.redirect('/etbs-roles/permissions/' + rolename + '/' + originProfileid);
