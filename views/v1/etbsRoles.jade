@@ -13,32 +13,35 @@ block content
             // h3.box-title Roles Management
           // /.box-header
           .box-body.table-responsive
+            p
+              a(href='/etbs-roles/add') New
             table#example1.table.table-bordered.table-striped
               thead
                 tr
                   th Role name
                   th Profile ID
                   th Active
+                  th(width=120)
               tbody
                 each role in roles
                   tr
                     td= role.rolename
                     td= role.profileid
                     td= role.is_active
+                    td(style='text-align: center')
+                      a(href='/etbs-roles/edit/' + role.rolename + '/' + role.profileid) Edit
+                      | -
+                      a(href='/etbs-roles/remove/' + role.rolename + '/' + role.profileid) Remove
+                      
               tfoot
                 tr
                   th Role name
                   th Profile ID
                   th Active
+                  th
           // /.box-body
         // /.box
   // /.content
-  ul
-    each role in roles
-      li= 'rolename: ' + role.rolename + ', profileid: ' + role.profileid + ', is_active: ' + role.is_active
-        a(href='/etbs-roles/edit/' + role.rolename + '/' + role.profileid) Edit
-        = '-'
-        a(href='/etbs-roles/remove/' + role.rolename + '/' + role.profileid) Remove
   script(src='https://code.jquery.com/jquery-3.1.1.min.js')
   script.
 block javascript

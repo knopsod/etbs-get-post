@@ -1,25 +1,36 @@
 extend ../layout3
-
 block content
-  ul
-    li
-      a(href='/etbs-roles') Roles
-    li
-      a(href='/etbs-permissions') Permissions
-    li
-      a(href='/etbs-users') Users
-  h1 Permission Roles
-  p Welcome to Permission Roles Page : 
-    strong= permission
-    |  has 
-    strong= rolename
-  a(href='/etbs-permissions/edit/' + permission + '/' + profileid + '/' + perm_type) Back to Form
-  ul
-    each role in roles
-      li= 'rolename: ' + role.rolename
-        form(method='POST' action='/etbs-permissions/roles/update')
-          input#permission(type='hidden' name='permission' value=permission)
-          input#profileid(type='hidden' name='profileid' value=profileid)
-          input#perm_type(type='hidden' name='perm_type' value=perm_type)
-          input#roleProfileid(type='hidden' name='roleProfileid' value=role.profileid)
-          button.btn.btn-primary(type='submit')= 'Assign ' + role.rolename + ' to this permission'
+  // Content Header (Page header)
+  section.content-header
+    h1
+      | Roles
+  // Main content
+  section.content
+    .row
+      // left column
+      .col-md-12
+        // general form elements
+        .box.box-primary
+          .box-header
+            h3.box-title Role of this permission
+          .box-body.pad.table-responsive
+            p
+              a(href='/etbs-permissions/edit/' + permission + '/' + profileid + '/' + perm_type) Back to Form
+            p Role of permission  
+              strong= permission
+              |  is 
+              strong= rolename
+            table.table.table-bordered.text-center
+              tr
+                th Role name
+                th(width=120)
+              each role in roles
+                tr
+                  td= role.rolename
+                  td
+                    form(method='POST' action='/etbs-permissions/roles/update')
+                      input#permission(type='hidden' name='permission' value=permission)
+                      input#profileid(type='hidden' name='profileid' value=profileid)
+                      input#perm_type(type='hidden' name='perm_type' value=perm_type)
+                      input#roleProfileid(type='hidden' name='roleProfileid' value=role.profileid)
+                      button.btn.btn-primary(type='submit')= 'Apply'
